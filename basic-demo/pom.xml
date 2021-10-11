@@ -10,6 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>basic-demo</artifactId>
+    <packaging>war</packaging>
+
+    <properties>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+    </properties>
 
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -30,12 +35,12 @@
                     </feature-packs>
                     <layers>
                         <layer>jaxrs</layer>
-<!--                        <layer>postgresql-datasource</layer>-->
+                        <!--                        <layer>postgresql-datasource</layer>-->
                         <layer>opentelemetry</layer>
                         <layer>management</layer>
                     </layers>
                     <plugin-options>
-<!--                        <jboss-fork-embedded>${plugin.fork.embedded}</jboss-fork-embedded>-->
+                        <!--                        <jboss-fork-embedded>${plugin.fork.embedded}</jboss-fork-embedded>-->
                     </plugin-options>
                 </configuration>
                 <executions>
