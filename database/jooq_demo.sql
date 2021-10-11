@@ -7,11 +7,11 @@ CREATE TABLE authors
 
 CREATE TABLE books
 (
-    id           int primary key,
-    title        text,
-    description  text,
-    publish_year int,
-    author_id    int REFERENCES authors (id)
+    id             int primary key,
+    title          text,
+    description    text,
+    published_year int,
+    author_id      int REFERENCES authors (id)
 );
 
 INSERT INTO authors (id, last_name, first_name)
@@ -19,7 +19,7 @@ VALUES (1, 'Tolkien', 'J.R.R.'),
        (2, 'Lewis', 'C.S'),
        (3, 'Sanderson', 'Brandon');
 
-INSERT INTO books (id, title, description, publish_year, author_id)
+INSERT INTO books (id, title, description, published_year, author_id)
 VALUES
        -- Source: https://www.tolkiensociety.org/author/books-by-tolkien/
        (1, 'Sir Gawain & The Green Knight', 'A modern translation of the Middle English romance from the stories of King Arthur.', 1925, 1),

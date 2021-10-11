@@ -1,5 +1,7 @@
 package com.steeplesoft.jooq.basic.model;
 
+import org.jooq.Record;
+
 public class Author {
     private Long id;
     private String lastName;
@@ -27,5 +29,14 @@ public class Author {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public static Author fromRecord(Record r) {
+        Author author = new Author();
+        author.setId(r.get("id", Long.class));
+        author.setFirstName(r.get("first_name", String.class));
+        author.setLastName(r.get("last_name", String.class));
+
+        return author;
     }
 }

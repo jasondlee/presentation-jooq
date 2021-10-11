@@ -1,10 +1,22 @@
 package com.steeplesoft.jooq.basic.model;
 
+import org.jooq.Record;
+
 public class Book {
     private Long id;
     private String title;
     private String description;
     private int publishYear;
+
+    public static Book fromRecord(Record r) {
+        Book book = new Book();
+        book.setId(r.get("id", Long.class));
+        book.setTitle(r.get("title", String.class));
+        book.setDescription(r.get("description", String.class));
+        book.setPublishYear(r.get("published_year", Integer.class));
+
+        return book;
+    }
 
     public Long getId() {
         return id;
