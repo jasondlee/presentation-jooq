@@ -19,7 +19,7 @@ public class FullBook extends Book {
         book.setTitle(r.get("books.title", String.class));
         book.setDescription(r.get("books.description", String.class));
         book.setPublishYear(r.get("books.published_year", Integer.class));
-        
+
         Author author = new Author();
         author.setId(r.get("authors.id", Long.class));
         author.setFirstName(r.get("authors.first_name", String.class));

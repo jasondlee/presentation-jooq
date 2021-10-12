@@ -1,0 +1,27 @@
+JOOQ Your Way to Typesafe, High-speed Queries
+
+Intro
+    Who Am I
+    What is JOOQ
+Setting up 
+    Configuring Maven
+    Supported Databases
+    Getting a connection
+        Connection
+        DataSource
+Querying
+    Basic selects
+    Where clauses
+    Joins
+Modifying data
+    Inserts
+    Updates
+    Deletes
+    Batch operations
+Code generation
+    Command line
+    Maven
+    Code samples
+Integration
+    CDI
+    Transactions?
