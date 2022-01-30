@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.steeplesoft.jooq.basic.model.Author;
@@ -37,7 +39,7 @@ public class DemoResource {
 
     @GET
     @Path("/authors")
-    public List<Author> getAuthors() {
+    public List<Author> getAuthors(@QueryParam("lastname") String lastName) {
         return Arrays.stream(dsl.select()
                         .from("authors")
                         .fetchArray())
@@ -52,6 +54,27 @@ public class DemoResource {
                         .from("books")
                         .fetchArray())
                 .map(r -> Book.fromRecord(r))
+                .collect(Collectors.toList());
+    }
+
+    @GET
+    @Path("/books/{author}")
+    public List<FullBook> getBooksByAuthor(@PathParam("author") String author) {
+        return Arrays.stream(dsl.select(
+                                DSL.field("books.id"),
+                                DSL.field("books.title"),
+                                DSL.field("books.description"),
+                                DSL.field("books.published_year"),
+                                DSL.field("authors.id"),
+                                DSL.field("authors.first_name"),
+                                DSL.field("authors.last_name")
+                        )
+                        .from("books")
+                        .join("authors")
+                        .on("books.author_id = authors.id")
+                        .where("author.lastName = ?", author)
+                        .fetchArray())
+                .map(r -> FullBook.fromRecord(r))
                 .collect(Collectors.toList());
     }
 
