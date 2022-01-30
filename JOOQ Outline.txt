@@ -6,6 +6,7 @@ Intro
 Setting up 
     Configuring Maven
     Supported Databases
+        Licensing
     Getting a connection
         Connection
         DataSource

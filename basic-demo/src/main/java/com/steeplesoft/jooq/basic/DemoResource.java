@@ -1,7 +1,14 @@
 package com.steeplesoft.jooq.basic;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,9 +77,12 @@ public class DemoResource {
 
     private DSLContext getDslContext() {
         try {
-            Class.forName("org.postgresql.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jooq_demo",
+            Class.forName("org.h2.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:h2:mem:jooq_demo",
                     "jooq_demo", "jooq_demo");
+
+            buildDatabase(conn);
+
             Configuration configuration = new DefaultConfiguration()
                     .set(conn)
                     .set(SQLDialect.POSTGRES)
@@ -87,5 +97,20 @@ public class DemoResource {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void buildDatabase(Connection conn) {
+        try {
+            String ddl = Files.readString(
+                    new File(getClass().getClassLoader().getResource("/jooq_demo.sql")
+                            .getFile())
+                            .toPath());
+
+            conn.createStatement().execute(ddl);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+
+//        File file = new File(url.toURI());
     }
 }
