@@ -22,52 +22,6 @@ import org.jooq.impl.DefaultConfiguration;
 public class DslContextProvider {
     private static DSLContext context;
 
-    public static DSLContext getDslContext() {
-        if (context == null) {
-            try {
-                Class.forName("org.h2.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:h2:mem:jooq_demo",
-                        "jooq_demo", "jooq_demo");
-
-                buildDatabase(conn);
-
-                Configuration configuration = new DefaultConfiguration()
-                        .set(conn)
-                        .set(SQLDialect.POSTGRES)
-                        .set(new Settings()
-                                .withExecuteLogging(true)
-                                .withRenderCatalog(false)
-                                .withRenderSchema(false)
-                                .withRenderQuotedNames(RenderQuotedNames.NEVER)
-                                .withRenderNameCase(RenderNameCase.LOWER_IF_UNQUOTED)
-                        );
-
-                context = DSL.using(configuration);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return context;
-    }
-
-    private static void buildDatabase(Connection conn) throws IOException, SQLException {
-        try (
-                BufferedReader rr = new BufferedReader(
-                        new InputStreamReader(DslContextProvider.class.getClassLoader().getResourceAsStream("/jooq_demo.sql")));
-        ) {
-            String line;
-            StringBuilder ddl = new StringBuilder();
-            while (null != (line = rr.readLine())) {
-                line = line.strip();
-                if (!line.startsWith("--")) {
-                    ddl.append(line);
-                }
-            }
-
-            conn.createStatement().execute(ddl.toString());
-        }
-    }
 
     /*
     @Produces
