@@ -1,7 +1,10 @@
 package com.steeplesoft.jooq.basic;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -23,9 +26,12 @@ import javax.ws.rs.core.MediaType;
 import com.steeplesoft.jooq.basic.model.Author;
 import com.steeplesoft.jooq.basic.model.Book;
 import com.steeplesoft.jooq.basic.model.FullBook;
+import com.steeplesoft.jooq.basic.providers.DslContextProvider;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
+import org.jooq.Record7;
 import org.jooq.SQLDialect;
+import org.jooq.SelectOnConditionStep;
 import org.jooq.conf.RenderNameCase;
 import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
@@ -35,12 +41,16 @@ import org.jooq.impl.DefaultConfiguration;
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 public class DemoResource {
-    private DSLContext dsl = getDslContext();
+    private DSLContext dsl = DslContextProvider.getDslContext();
 
     @GET
     @Path("/authors")
     public List<Author> getAuthors(@QueryParam("lastname") String lastName) {
-        return Arrays.stream(dsl.select()
+        return Arrays.stream(dsl.select(
+                                DSL.field("id"),
+                                DSL.field("last_name"),
+                                DSL.field("first_name")
+                        )
                         .from("authors")
                         .fetchArray())
                 .map(r -> Author.fromRecord(r))
@@ -72,7 +82,7 @@ public class DemoResource {
                         .from("books")
                         .join("authors")
                         .on("books.author_id = authors.id")
-                        .where("author.lastName = ?", author)
+                        .where("authors.last_name = ?", author)
                         .fetchArray())
                 .map(r -> FullBook.fromRecord(r))
                 .collect(Collectors.toList());
@@ -96,44 +106,5 @@ public class DemoResource {
                         .fetchArray())
                 .map(r -> FullBook.fromRecord(r))
                 .collect(Collectors.toList());
-    }
-
-    private DSLContext getDslContext() {
-        try {
-            Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:mem:jooq_demo",
-                    "jooq_demo", "jooq_demo");
-
-            buildDatabase(conn);
-
-            Configuration configuration = new DefaultConfiguration()
-                    .set(conn)
-                    .set(SQLDialect.POSTGRES)
-                    .set(new Settings()
-                            .withExecuteLogging(true)
-                            .withRenderCatalog(false)
-                            .withRenderSchema(false)
-                            .withRenderQuotedNames(RenderQuotedNames.NEVER)
-                            .withRenderNameCase(RenderNameCase.LOWER_IF_UNQUOTED));
-
-            return DSL.using(configuration);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void buildDatabase(Connection conn) {
-        try {
-            String ddl = Files.readString(
-                    new File(getClass().getClassLoader().getResource("/jooq_demo.sql")
-                            .getFile())
-                            .toPath());
-
-            conn.createStatement().execute(ddl);
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
-
-//        File file = new File(url.toURI());
     }
 }

@@ -11,31 +11,34 @@ public class Author {
         return id;
     }
 
-    public void setId(Long id) {
+    public Author setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public Author setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public Author setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     public static Author fromRecord(Record r) {
-        Author author = new Author();
-        author.setId(r.get("id", Long.class));
-        author.setFirstName(r.get("first_name", String.class));
-        author.setLastName(r.get("last_name", String.class));
+        Author author = new Author()
+                .setId(r.getValue("id", Long.class))
+                .setFirstName(r.getValue("first_name", String.class))
+                .setLastName(r.getValue("last_name", String.class));
 
         return author;
     }
