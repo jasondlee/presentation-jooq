@@ -29,8 +29,12 @@ import com.steeplesoft.jooq.basic.model.FullBook;
 import com.steeplesoft.jooq.basic.providers.DslContextProvider;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Record4;
 import org.jooq.Record7;
 import org.jooq.SQLDialect;
+import org.jooq.SelectConditionStep;
+import org.jooq.SelectJoinStep;
 import org.jooq.SelectOnConditionStep;
 import org.jooq.conf.RenderNameCase;
 import org.jooq.conf.RenderQuotedNames;
@@ -45,7 +49,7 @@ public class DemoResource {
 
     @GET
     @Path("/authors")
-    public List<Author> getAuthors(@QueryParam("lastname") String lastName) {
+    public List<Author> getAuthors() {
         return Arrays.stream(dsl.select(
                                 DSL.field("id"),
                                 DSL.field("last_name"),
@@ -59,10 +63,30 @@ public class DemoResource {
 
     @GET
     @Path("/books")
-    public List<Book> getBooks() {
-        return Arrays.stream(dsl.select()
-                        .from("books")
-                        .fetchArray())
+    public List<Book> getBooks(
+            @QueryParam("title") String title,
+            @QueryParam("description") String description,
+            @QueryParam("year") Integer publishedYear
+    ) {
+        SelectConditionStep query = dsl.select(
+                        DSL.field("id"),
+                        DSL.field("title"),
+                        DSL.field("description"),
+                        DSL.field("published_year")
+                )
+                .from("books")
+                .where("1=1");
+        if (title != null) {
+            query = query.and(DSL.field("title").like("%" + title + "%"));
+        }
+        if (description != null) {
+            query = query.and(DSL.field("description").like("%" + description + "%"));
+        }
+        if (publishedYear != null) {
+            query = query.and(DSL.field("published_year").eq(publishedYear));
+        }
+        System.out.println(query.getSQL());
+        return Arrays.stream(query.fetchArray())
                 .map(r -> Book.fromRecord(r))
                 .collect(Collectors.toList());
     }
@@ -82,7 +106,6 @@ public class DemoResource {
                         .from("books")
                         .join("authors")
                         .on("books.author_id = authors.id")
-                        .where("authors.last_name = ?", author)
                         .fetchArray())
                 .map(r -> FullBook.fromRecord(r))
                 .collect(Collectors.toList());
@@ -90,20 +113,25 @@ public class DemoResource {
 
     @GET
     @Path("/booksAndAuthors")
-    public List<FullBook> getFullBooks() {
-        return Arrays.stream(dsl.select(
-                                DSL.field("books.id"),
-                                DSL.field("books.title"),
-                                DSL.field("books.description"),
-                                DSL.field("books.published_year"),
-                                DSL.field("authors.id"),
-                                DSL.field("authors.first_name"),
-                                DSL.field("authors.last_name")
-                        )
-                        .from("books")
-                        .join("authors")
-                        .on("books.author_id = authors.id")
-                        .fetchArray())
+    public List<FullBook> getFullBooks(@QueryParam("author") String author) {
+        SelectConditionStep query = dsl.select(
+                        DSL.field("books.id"),
+                        DSL.field("books.title"),
+                        DSL.field("books.description"),
+                        DSL.field("books.published_year"),
+                        DSL.field("authors.id"),
+                        DSL.field("authors.first_name"),
+                        DSL.field("authors.last_name")
+                )
+                .from("books")
+                .join("authors")
+                .on("books.author_id = authors.id")
+                .where("1=1");
+        if (author != null) {
+            query = query.and("authors.last_name = ?", author);
+
+        }
+        return Arrays.stream(query.fetchArray())
                 .map(r -> FullBook.fromRecord(r))
                 .collect(Collectors.toList());
     }
