@@ -1,14 +1,8 @@
 package com.steeplesoft.jooq.basic;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,16 +20,10 @@ import javax.ws.rs.core.MediaType;
 import com.steeplesoft.jooq.basic.model.Author;
 import com.steeplesoft.jooq.basic.model.Book;
 import com.steeplesoft.jooq.basic.model.FullBook;
-import com.steeplesoft.jooq.basic.providers.DslContextProvider;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Record4;
-import org.jooq.Record7;
 import org.jooq.SQLDialect;
 import org.jooq.SelectConditionStep;
-import org.jooq.SelectJoinStep;
-import org.jooq.SelectOnConditionStep;
 import org.jooq.conf.RenderNameCase;
 import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
@@ -164,7 +152,7 @@ public class DemoResource {
     private void buildDatabase(Connection conn) throws IOException, SQLException {
         try (
                 BufferedReader rr = new BufferedReader(
-                        new InputStreamReader(DslContextProvider.class.getClassLoader().getResourceAsStream("/jooq_demo.sql")));
+                        new InputStreamReader(getClass().getClassLoader().getResourceAsStream("/jooq_demo.sql")));
         ) {
             String line;
             StringBuilder ddl = new StringBuilder();

@@ -9,44 +9,46 @@ public class Book {
     private int publishYear;
 
     public static Book fromRecord(Record r) {
-        Book book = new Book();
-        book.setId(r.get("id", Long.class));
-        book.setTitle(r.get("title", String.class));
-        book.setDescription(r.get("description", String.class));
-        book.setPublishYear(r.get("published_year", Integer.class));
-
-        return book;
+        return new Book()
+                .setId(r.get("id", Long.class))
+                .setTitle(r.get("title", String.class))
+                .setDescription(r.get("description", String.class))
+                .setPublishYear(r.get("published_year", Integer.class));
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public Book setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public Book setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public Book setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public int getPublishYear() {
         return publishYear;
     }
 
-    public void setPublishYear(int publishYear) {
+    public Book setPublishYear(int publishYear) {
         this.publishYear = publishYear;
+        return this;
     }
 }

@@ -16,9 +16,9 @@ Setting up
         DataSource
 Querying
     Basic selects
+    Fetching
     Where clauses
     Joins
-    Fetching
 Modifying data
     Inserts
     Updates

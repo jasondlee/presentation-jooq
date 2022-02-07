@@ -35,11 +35,9 @@ public class Author {
     }
 
     public static Author fromRecord(Record r) {
-        Author author = new Author()
+        return new Author()
                 .setId(r.getValue("id", Long.class))
                 .setFirstName(r.getValue("first_name", String.class))
                 .setLastName(r.getValue("last_name", String.class));
-
-        return author;
     }
 }
