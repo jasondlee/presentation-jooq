@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Shower Presentation Engine</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="node_modules/@shower/ribbon/styles/styles.css">
+    <style>
+        .shower {
+            --slide-ratio: calc(16 / 9);
+        }
+        .textwbg h2 {
+            margin: 30px 0 0;
+            color: white;
+            text-align: center;
+            font-size: 70px;
+        }
+
+        .textwbg p {
+            margin: 10px 0 0;
+            text-align: center;
+            color: white;
+            font-style: italic;
+            font-size: 20px;
+        }
+
+        .textwbg p a {
+            color: white;
+        }
+    </style>
+</head>
+<body class="shower list">
+
+<header class="caption">
+    <h1>Devnexus - jOOQ</h1>
+    <p>Jason Lee, Red Hat</p>
+</header>
+
+<section class="slide textwbg" id="cover">
+    <h2>jOOQ: Data abstractions without distraction</h2>
+    <p >Jason Lee</p>
+    <p>Principal Software Engineer, Red Hat</p>
+    <p>April 2022</p>
+    <figure>
+        <img class="cover" src="pictures/cover.png" alt="Red Hat slide background">
+        <figcaption class="copyright right white">
+            <a href="https://redhat.com">© Red Hat</a>
+        </figcaption>
+    </figure>
+</section>
+
+<section class="slide">
+    <h2>Who Am I?</h2>
+    <ul>
+        <li>Software developer since 1997</li>
+        <li>Principal Java Engineer at Red Hat
+            <ul>
+                <li>WildFly/EAP</li>
+                <li>Undertow</li>
+            </ul>
+        </li>
+        <li>Former president <a href="https://okcjug.org">Oklahoma City Java Users Group</a></li>
+        <li><a href="https://www.packtpub.com/application-development/java-9-programming-blueprints">Book author</a></li>
+        <li><a href="https://jasondl.ee">Blogger</a></li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>What is jOOQ?</h2>
+    <ul>
+        <li>“[O]riginally...created as a library for complete abstraction of JDBC and all database interaction”</li>
+        <li>Type-safe SQL building</li>
+        <li>Improved query execution and data retrieval API</li>
+        <li>Active Records</li>
+        <li>SQL dialect abstraction</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>What is jOOQ? (cont.)</h2>
+    <ul>
+        <li>Sibling libraries
+            <ul>
+                <li><a href="https://www.jooq.org/products/jOOX">jOOX</a> - The Power of jQuery Applied to W3C DOM</li>
+                <li><a href="https://www.jooq.org/products/jOO%CE%BB">jOOλ</a> - The Missing Parts in Java 8</li>
+                <li><a href="https://www.jooq.org/products/jOOR">jOOR</a> - Fluent Reflection in Java</li>
+                <li><a href="https://www.jooq.org/products/jOOU">jOOU</a> - Unsigned Integers</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>jOOQ Alternatives</h2>
+    <p>Lots of options in the Java ecosystem:</p>
+    <ul class="columns two">
+        <li>JDBC</li>
+        <li>Hibernate/JPA</li>
+        <li>Spring JdbcTemplate/Data</li>
+        <li>MyBatis</li>
+        <li>Jdbi</li>
+        <li>...</li>
+    </ul>
+    <p class="next">If any of these work for you, carry on!</p>
+</section>
+
+<section class="slide textwbg" id="showme">
+    <h2 class="shout shrink">Show me the code!!</h2>
+
+    <figure>
+        <img class="cover" src="pictures/showmethemoney.jpg" alt="Show me the money!">
+    </figure>
+</section>
+
+<footer class="badge">
+    <a href="https://github.com/shower/shower">Fork me on GitHub</a>
+</footer>
+
+<div class="progress"></div>
+
+<script src="node_modules/@shower/core/dist/shower.js"></script>
+<!-- Copyright © 2022 Yours Truly, Famous Inc. -->
+
+</body>
+</html>
