@@ -160,6 +160,11 @@
     &lt;groupId&gt;org.jooq&lt;/groupId&gt;
     &lt;artifactId&gt;jooq&lt;/artifactId&gt;
     &lt;version&gt;3.16.3&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jooq&lt;/groupId&gt;
+    &lt;artifactId&gt;jooq-meta&lt;/artifactId&gt;
+    &lt;version&gt;3.16.3&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </section>
 
@@ -169,6 +174,7 @@
     <div class="next">Just kidding!
         <pre class="next"><code>dependencies {
     compile 'org.jooq:jooq:3.16.3'
+    compile 'org.jooq:jooq-meta:3.16.3'
 }</code></pre>
     </div>
 </section>
@@ -202,6 +208,47 @@ DSLContext context = DSL.using(configuration);
                 </code>
             </pre>
         </li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Writing queries - non-codegen</h2>
+    <p><pre><code>dsl.select(
+        DSL.field("id"),
+        DSL.field("last_name"),
+        DSL.field("first_name")
+)
+.from("authors")
+        </code></pre></p>
+</section>
+
+<section class="slide">
+    <h2>Fetching data - non-codegen</h2>
+    <p>Query:
+        <pre><code>dsl.select(...)
+        .from("authors")
+        <mark class="important">.fetchArray())
+    .map(r -> Author.fromRecord(r))
+    .collect(Collectors.toList())</mark></code></pre></p>
+</section>
+
+<section class="slide">
+    <h2>Fetching data - non-codegen (cont)</h2>
+    <p>Fetching:<pre><code>public class Author {
+    public static Author fromRecord(Record r) {
+        return new Author()
+                .setId(r.getValue("id", Long.class))
+                .setFirstName(r.getValue("first_name", String.class))
+                .setLastName(r.getValue("last_name", String.class));
+    }
+}</code></pre>
+    </p>
+</section>
+
+<section class="slide">
+    <h2>Writing queries - codegen</h2>
+    <ul>
+        <li></li>
     </ul>
 </section>
 

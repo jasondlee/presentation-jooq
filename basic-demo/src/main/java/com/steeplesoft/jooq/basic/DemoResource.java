@@ -126,8 +126,9 @@ public class DemoResource {
 
     private DSLContext getDslContext() {
         try {
+            String dbloc = System.getProperty("jooq.db", "/tmp/blargh");
             Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:mem:jooq_demo",
+            Connection conn = DriverManager.getConnection("jdbc:h2:file:" + dbloc,
                     "jooq_demo", "jooq_demo");
 
             buildDatabase(conn);

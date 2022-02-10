@@ -145,4 +145,60 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <profiles>
+        <profile>
+            <id>jooq-codegen</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jooq</groupId>
+                        <artifactId>jooq-codegen-maven</artifactId>
+                        <version>${version.jooq}</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <jdbc>
+                                <url>${flyway.url}</url>
+                                <user>${flyway.user}</user>
+                                <password>${flyway.password}</password>
+                                <schema>public</schema>
+                            </jdbc>
+                            <generator>
+                                <database>
+                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                                    <includes>.*</includes>
+                                    <inputSchema>public</inputSchema>
+                                    <outputSchema>public</outputSchema>
+                                </database>
+                                <target>
+                                    <packageName>com.steeplesoft.backend.models.jooq</packageName>
+                                    <directory>${jooq.outputdir}</directory>
+                                </target>
+
+                                <generate>
+                                    <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>
+                                    <javaTimeTypes>true</javaTimeTypes>
+                                    <fluentSetters>true</fluentSetters>
+                                </generate>
+                            </generator>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.postgresql</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>${version.pgsql-jdbc}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
