@@ -9,6 +9,7 @@
         .shower {
             --slide-ratio: calc(16 / 9);
         }
+
         .textwbg h2 {
             margin: 30px 0 0;
             color: white;
@@ -27,6 +28,10 @@
         .textwbg p a {
             color: white;
         }
+
+        code {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body class="shower list">
@@ -38,7 +43,7 @@
 
 <section class="slide textwbg" id="cover">
     <h2 style="margin: 100px">jOOQ: Data abstractions without distraction</h2>
-    <p >Jason Lee</p>
+    <p>Jason Lee</p>
     <p>Principal Software Engineer, Red Hat</p>
     <p>April 2022</p>
     <img class="place top left" src="pictures/rh200.png" style="margin: 50px">
@@ -61,7 +66,8 @@
             </ul>
         </li>
         <li>Former president <a href="https://okcjug.org">Oklahoma City Java Users Group</a></li>
-        <li><a href="https://www.packtpub.com/application-development/java-9-programming-blueprints">Book author</a></li>
+        <li><a href="https://www.packtpub.com/application-development/java-9-programming-blueprints">Book author</a>
+        </li>
         <li><a href="https://jasondl.ee">Blogger</a></li>
     </ul>
 </section>
@@ -105,20 +111,98 @@
     <p class="next">If any of these work for you, carry on!</p>
 </section>
 
-<section class="slide textwbg" id="showme">
-    <h2 class="shout shrink">Show me the code!!</h2>
-
-    <figure>
-        <img class="cover width" src="pictures/showmethemoney.jpg" alt="Show me the money!">
-    </figure>
-
+<section class="slide">
+    <h2>Supported Databases</h2>
+    <span class="next">What databases are supported</span>
+    <span class="next shout">All of them!</span>
 </section>
 
 <section class="slide">
-    <h2>derp</h2>
-    <footer class="footer">
-        <p>Cosby sweater Shoreditch.</p>
-    </footer>
+    <h2>Supported Databases (cont)</h2>
+    <ul class="next">
+        <li>Open Source and Commercial licenses</li>
+        <li class="next">Free
+            <ul class="columns four">
+                <li>PostgreSQL</li>
+                <li>MySQL</li>
+                <li>MariaDB</li>
+                <li>Firebird</li>
+                <li>Derby</li>
+                <li>H2</li>
+                <li>SQLite</li>
+            </ul>
+        </li>
+        <li class="next">Commercial (three tiers: Express, Professional, and Enterprise)
+            <ul class="columns four">
+                <li>MS Access</li>
+                <li>Oracle</li>
+                <li>SQL Server</li>
+                <li>Redshift</li>
+                <li>Aurora</li>
+                <li>CockroachDB</li>
+                <li>Informix</li>
+                <li>Teradata</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section class="slide textwbg" id="showme">
+    <h2 class="shout shrink">Show me the code!!</h2>
+    <figure>
+        <img class="cover width" src="pictures/showmethemoney.jpg" alt="Show me the money!">
+    </figure>
+</section>
+
+<section class="slide">
+    <h2>Setting up the build - Maven</h2>
+    <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.jooq&lt;/groupId&gt;
+    &lt;artifactId&gt;jooq&lt;/artifactId&gt;
+    &lt;version&gt;3.16.3&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Setting up the build - Gradle</h2>
+    <div class="next">You're on your own</div>
+    <div class="next">Just kidding!
+        <pre class="next"><code>dependencies {
+    compile 'org.jooq:jooq:3.16.3'
+}</code></pre>
+    </div>
+</section>
+
+<section class="slide">
+    <h2>First step - DSLContext</h2>
+    <ul>
+        <li class="next">Primary API is the <code>DSLContext</code></li>
+        <li class="next">Can use either <code>Connection</code> or a <code>DataSource</code>
+            <ul class="next">
+                <li>DSLContext context = DSL.using(conn, SQLDialect.MYSQL);</li>
+                <li class="next">DSLContext context = DSL.using(dataSource, SQLDialect.MYSQL);</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>First step - DSLContext (cont)</h2>
+    <ul>
+        <li>For finer-grained control, use a <code>Configuration</code> object:
+            <br>
+            <pre><code>Configuration configuration = new DefaultConfiguration()
+    .set(conn)
+    .set(SQLDialect.POSTGRES)
+    .set(new Settings()
+        .withRenderQuotedNames(RenderQuotedNames.NEVER)
+        .withRenderNameCase(RenderNameCase.LOWER_IF_UNQUOTED)
+    );
+DSLContext context = DSL.using(configuration);
+                </code>
+            </pre>
+        </li>
+    </ul>
 </section>
 
 <footer class="badge">
