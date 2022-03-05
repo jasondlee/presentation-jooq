@@ -21,7 +21,7 @@ VALUES (1, 'Tolkien', 'J.R.R.'),
 
 INSERT INTO books (id, title, description, published_year, author_id)
 VALUES
-       -- Source: https://www.tolkiensociety.org/author/books-by-tolkien/
+       -- Source: https://www.tolkiensociety.org/actor/books-by-tolkien/
        (1, 'Sir Gawain & The Green Knight', 'A modern translation of the Middle English romance from the stories of King Arthur.', 1925, 1),
        (2, 'The Hobbit: or There and Back Again', 'The bedtime story for his children famously begun on the blank page of an exam script that tells the tale of Bilbo Baggins and the dwarves in their quest to take back the Lonely Mountain from Smaug the dragon.', 1937, 1),
        (3, 'The Fellowship of the Ring', 'One of the world’s most famous books that continues the tale of the ring Bilbo found in The Hobbit and what comes next for it, him, and his nephew Frodo.', 1954, 1),

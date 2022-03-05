@@ -8,4 +8,13 @@ create database jooq_demo owner jooq_demo;
 grant all privileges on database jooq_demo to jooq_demo ;
 EOF
 
-psql -U jooq_demo -d jooq_demo -f jooq_demo.sql
+    #postgres-sakila-delete-data.sql \
+    #postgres-sakila-drop-objects.sql \
+
+psql -1 -q -U postgres -d jooq_demo -f postgres-sakila-schema.sql -f postgres-sakila-insert-data.sql 
+psql -q -U postgres -d jooq_demo << EOF
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO jooq_demo;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jooq_demo;
+EOF
+
+
