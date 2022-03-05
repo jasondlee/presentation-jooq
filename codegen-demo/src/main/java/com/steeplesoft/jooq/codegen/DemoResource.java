@@ -3,6 +3,7 @@ package com.steeplesoft.jooq.codegen;
 import com.steeplesoft.jooq.codegen.model.ActorModel;
 import com.steeplesoft.jooq.codegen.model.FilmModel;
 import com.steeplesoft.jooq.codegen.model.FullFilmModel;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Record7;
@@ -16,6 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +34,7 @@ public class DemoResource {
     @GET
     @Path("/actors")
     public List<ActorModel> getActors() {
-        return dsl.select()
-                .from(ACTOR)
-                .fetch()
+        return dsl.fetch(ACTOR)
                 .map(r -> ActorModel.fromRecord(r));
     }
 
@@ -45,39 +45,39 @@ public class DemoResource {
             @QueryParam("description") String description,
             @QueryParam("year") Integer releaseYear
     ) {
-        SelectConditionStep<Record> query = dsl.select()
-                .from(FILM)
-                .where("1=1");
+        List<Condition> conditions = new ArrayList<>();
         if (title != null) {
-            query = query.and(FILM.TITLE.like("%" + title + "%"));
+            conditions.add(FILM.TITLE.like("%" + title + "%"));
         }
         if (description != null) {
-            query = query.and(FILM.DESCRIPTION.like("%" + description + "%"));
+            conditions.add(FILM.DESCRIPTION.like("%" + description + "%"));
         }
         if (releaseYear != null) {
-            query = query.and(FILM.RELEASE_YEAR.eq(releaseYear));
+            conditions.add(FILM.RELEASE_YEAR.eq(releaseYear));
         }
-        return query.fetch().map(r -> FilmModel.fromRecord(r));
+
+        return dsl.select()
+                .from(FILM)
+                .where(conditions)
+                .fetch().map(r -> FilmModel.fromRecord(r));
     }
 
     @GET
     @Path("/films/{actor}")
     public List<FullFilmModel> getFilmsByActor(@PathParam("actor") @NotNull Integer actor) {
-        SelectConditionStep<Record7<Integer, String, String, Integer, Integer, String, String>> query = dsl.select(
+        return dsl.select(
                         FILM.FILM_ID,
                         FILM.TITLE,
                         FILM.DESCRIPTION,
                         FILM.RELEASE_YEAR,
                         ACTOR.ACTOR_ID,
                         ACTOR.FIRST_NAME,
-                        ACTOR.LAST_NAME
-                )
+                        ACTOR.LAST_NAME)
                 .from(FILM)
                 .join(FILM_ACTOR).on(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
                 .join(ACTOR).on(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
-                .where(ACTOR.ACTOR_ID.eq(actor));
-
-        return query.fetch().stream()
+                .where(ACTOR.ACTOR_ID.eq(actor))
+                .fetch().stream()
                 .map(r -> FullFilmModel.fromRecord(r))
                 .collect(Collectors.toList());
     }
@@ -85,7 +85,12 @@ public class DemoResource {
     @GET
     @Path("/filmsAndActors")
     public List<FullFilmModel> getFullFilms(@QueryParam("actor") String actor) {
-        SelectConditionStep<Record7<Integer, String, String, Integer, Integer, String, String>> query = dsl.select(
+        List<Condition> conditions = new ArrayList<>();
+        if (actor != null) {
+            conditions.add(ACTOR.LAST_NAME.eq(actor));
+        }
+
+        return dsl.select(
                         FILM.FILM_ID,
                         FILM.TITLE,
                         FILM.DESCRIPTION,
@@ -97,11 +102,8 @@ public class DemoResource {
                 .from(FILM)
                 .join(FILM_ACTOR).on(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
                 .join(ACTOR).on(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
-                .where("1=1");
-        if (actor != null) {
-            query = query.and(ACTOR.LAST_NAME.eq(actor));
-        }
-        return query.fetch().stream()
+                .where(conditions)
+                .fetch().stream()
                 .map(r -> FullFilmModel.fromRecord(r))
                 .collect(Collectors.toList());
     }

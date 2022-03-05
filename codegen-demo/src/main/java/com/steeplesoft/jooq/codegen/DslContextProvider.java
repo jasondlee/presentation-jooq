@@ -29,7 +29,7 @@ class DslContextProvider {
                     .withExecuteLogging(true)
                     .withRenderCatalog(false)
                     .withRenderSchema(false)
-                    .withRenderQuotedNames(RenderQuotedNames.NEVER)
+                    .withRenderQuotedNames(RenderQuotedNames.EXPLICIT_DEFAULT_UNQUOTED)
                     .withRenderNameCase(RenderNameCase.LOWER_IF_UNQUOTED)
             );
 

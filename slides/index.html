@@ -214,11 +214,11 @@ DSLContext context = DSL.using(configuration);
 <section class="slide">
     <h2>Writing queries - non-codegen</h2>
     <p><pre><code>dsl.select(
-        DSL.field("id"),
+        DSL.field("actor_id"),
         DSL.field("last_name"),
         DSL.field("first_name")
 )
-.from("authors")
+.from("actor")
         </code></pre></p>
 </section>
 
@@ -226,18 +226,18 @@ DSLContext context = DSL.using(configuration);
     <h2>Fetching data - non-codegen</h2>
     <p>Query:
         <pre><code>dsl.select(...)
-        .from("authors")
-        <mark class="important">.fetchArray())
+        .from("actor")
+        <mark class="important">.fetch())
     .map(r -> Author.fromRecord(r))
     .collect(Collectors.toList())</mark></code></pre></p>
 </section>
 
 <section class="slide">
     <h2>Fetching data - non-codegen (cont)</h2>
-    <p>Fetching:<pre><code>public class Author {
-    public static Author fromRecord(Record r) {
-        return new Author()
-                .setId(r.getValue("id", Long.class))
+    <p>Fetching:<pre><code>public class Actor {
+    public static Actor fromRecord(Record r) {
+        return new Actor()
+                .setId(r.getValue("actor_id", Long.class))
                 .setFirstName(r.getValue("first_name", String.class))
                 .setLastName(r.getValue("last_name", String.class));
     }

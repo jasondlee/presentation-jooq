@@ -132,7 +132,7 @@ public class DemoResource {
                             .withRenderCatalog(false)
                             .withRenderSchema(false)
                             .withExecuteLogging(true)
-                            .withRenderQuotedNames(RenderQuotedNames.NEVER)
+                            .withRenderQuotedNames(RenderQuotedNames.EXPLICIT_DEFAULT_UNQUOTED)
                             .withRenderNameCase(RenderNameCase.LOWER_IF_UNQUOTED)
                     );
 
