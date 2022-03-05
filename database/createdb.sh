@@ -11,10 +11,13 @@ EOF
     #postgres-sakila-delete-data.sql \
     #postgres-sakila-drop-objects.sql \
 
-psql -1 -q -U postgres -d jooq_demo -f postgres-sakila-schema.sql -f postgres-sakila-insert-data.sql 
+psql -q -U postgres -d jooq_demo -f postgres-sakila-schema.sql
+
 psql -q -U postgres -d jooq_demo << EOF
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO jooq_demo;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jooq_demo;
 EOF
+
+psql -q -U postgres -d jooq_demo -f postgres-sakila-insert-data.sql
 
 

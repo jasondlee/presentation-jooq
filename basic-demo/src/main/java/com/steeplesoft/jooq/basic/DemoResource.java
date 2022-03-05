@@ -1,14 +1,19 @@
 package com.steeplesoft.jooq.basic;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.steeplesoft.jooq.basic.model.Actor;
+import com.steeplesoft.jooq.basic.model.Film;
+import com.steeplesoft.jooq.basic.model.FullFilm;
+import org.jooq.Configuration;
+import org.jooq.DSLContext;
+import org.jooq.Record4;
+import org.jooq.Record7;
+import org.jooq.SQLDialect;
+import org.jooq.SelectConditionStep;
+import org.jooq.conf.RenderNameCase;
+import org.jooq.conf.RenderQuotedNames;
+import org.jooq.conf.Settings;
+import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
@@ -17,16 +22,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import com.steeplesoft.jooq.basic.model.Actor;
-import com.steeplesoft.jooq.basic.model.Film;
-import com.steeplesoft.jooq.basic.model.FullFilm;
-import org.jooq.*;
-import org.jooq.conf.RenderNameCase;
-import org.jooq.conf.RenderQuotedNames;
-import org.jooq.conf.Settings;
-import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultConfiguration;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -36,15 +35,14 @@ public class DemoResource {
     @GET
     @Path("/actors")
     public List<Actor> getActors() {
-        return Arrays.stream(dsl.select(
-                                DSL.field("actor_id"),
-                                DSL.field("last_name"),
-                                DSL.field("first_name")
-                        )
-                        .from("actor")
-                        .fetchArray())
-                .map(r -> Actor.fromRecord(r))
-                .collect(Collectors.toList());
+        return dsl.select(
+                        DSL.field("actor_id"),
+                        DSL.field("last_name"),
+                        DSL.field("first_name")
+                )
+                .from("actor")
+                .fetch()
+                .map(r -> Actor.fromRecord(r));
     }
 
     @GET
@@ -54,7 +52,7 @@ public class DemoResource {
             @QueryParam("description") String description,
             @QueryParam("year") Integer releaseYear
     ) {
-        SelectConditionStep query = dsl.select(
+        SelectConditionStep<Record4<Object, Object, Object, Object>> query = dsl.select(
                         DSL.field("film_id"),
                         DSL.field("title"),
                         DSL.field("description"),
@@ -72,9 +70,8 @@ public class DemoResource {
             query = query.and(DSL.field("release_year").eq(releaseYear));
         }
         System.out.println(query.getSQL());
-        return Arrays.stream(query.fetchArray())
-                .map(r -> Film.fromRecord(r))
-                .collect(Collectors.toList());
+        return query.fetch()
+                .map(r -> Film.fromRecord(r));
     }
 
     @GET
@@ -94,9 +91,8 @@ public class DemoResource {
                 .join("actor").on("film_actor.actor_id = actor.actor_id")
                 .where(DSL.field("actor.actor_id").eq(actor));
 
-        return query.fetch().stream()
-                .map(r -> FullFilm.fromRecord(r))
-                .collect(Collectors.toList());
+        return query.fetch()
+                .map(r -> FullFilm.fromRecord(r));
     }
 
     @GET
@@ -118,9 +114,8 @@ public class DemoResource {
         if (actor != null) {
             query = query.and("actor.last_name = ?", actor);
         }
-        return query.fetch().stream()
-                .map(r -> FullFilm.fromRecord(r))
-                .collect(Collectors.toList());
+        return query.fetch()
+                .map(r -> FullFilm.fromRecord(r));
     }
 
     private DSLContext getDslContext() {
@@ -144,24 +139,6 @@ public class DemoResource {
             return DSL.using(configuration);
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void buildDatabase(Connection conn) throws IOException, SQLException {
-        try (
-                BufferedReader rr = new BufferedReader(
-                        new InputStreamReader(getClass().getClassLoader().getResourceAsStream("/jooq_demo.sql")));
-        ) {
-            String line;
-            StringBuilder ddl = new StringBuilder();
-            while (null != (line = rr.readLine())) {
-                line = line.strip();
-                if (!line.startsWith("--")) {
-                    ddl.append(line);
-                }
-            }
-
-            conn.createStatement().execute(ddl.toString());
         }
     }
 }
