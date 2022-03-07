@@ -5,9 +5,6 @@ import com.steeplesoft.jooq.codegen.model.FilmModel;
 import com.steeplesoft.jooq.codegen.model.FullFilmModel;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Record7;
-import org.jooq.SelectConditionStep;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -27,7 +24,7 @@ import static com.steeplesoft.jooq_demo.generated.tables.FilmActor.FILM_ACTOR;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
-public class DemoResource {
+public class Demo1Resource {
     @Inject
     private DSLContext dsl;
 
@@ -97,8 +94,7 @@ public class DemoResource {
                         FILM.RELEASE_YEAR,
                         ACTOR.ACTOR_ID,
                         ACTOR.FIRST_NAME,
-                        ACTOR.LAST_NAME
-                )
+                        ACTOR.LAST_NAME)
                 .from(FILM)
                 .join(FILM_ACTOR).on(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
                 .join(ACTOR).on(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))

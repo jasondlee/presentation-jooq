@@ -8,7 +8,17 @@ public class FilmModel {
     private Integer id;
     private String title;
     private String description;
-    private int releaseYear;
+    private Integer releaseYear;
+
+    public FilmModel() {
+    }
+
+    public FilmModel(Integer id, String title, String description, Integer releaseYear) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.releaseYear = releaseYear;
+    }
 
     public static FilmModel fromRecord(Record r) {
         return new FilmModel()
@@ -45,11 +55,11 @@ public class FilmModel {
         return this;
     }
 
-    public int getReleaseYear() {
+    public Integer getReleaseYear() {
         return releaseYear;
     }
 
-    public FilmModel setReleaseYear(int releaseYear) {
+    public FilmModel setReleaseYear(Integer releaseYear) {
         this.releaseYear = releaseYear;
         return this;
     }

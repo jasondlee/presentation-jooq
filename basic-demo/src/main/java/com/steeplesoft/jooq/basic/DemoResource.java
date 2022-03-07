@@ -3,12 +3,10 @@ package com.steeplesoft.jooq.basic;
 import com.steeplesoft.jooq.basic.model.Actor;
 import com.steeplesoft.jooq.basic.model.Film;
 import com.steeplesoft.jooq.basic.model.FullFilm;
+import org.jooq.Condition;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
-import org.jooq.Record4;
-import org.jooq.Record7;
 import org.jooq.SQLDialect;
-import org.jooq.SelectConditionStep;
 import org.jooq.conf.RenderNameCase;
 import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
@@ -24,8 +22,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -52,32 +50,34 @@ public class DemoResource {
             @QueryParam("description") String description,
             @QueryParam("year") Integer releaseYear
     ) {
-        SelectConditionStep<Record4<Object, Object, Object, Object>> query = dsl.select(
+        List<Condition> conditions = new ArrayList<>();
+        if (title != null) {
+            conditions.add(DSL.field("title").like("%" + title + "%"));
+        }
+        if (description != null) {
+            conditions.add(DSL.field("description").like("%" + description + "%"));
+        }
+        if (releaseYear != null) {
+            conditions.add(DSL.field("release_year").eq(releaseYear));
+        }
+
+
+        return dsl.select(
                         DSL.field("film_id"),
                         DSL.field("title"),
                         DSL.field("description"),
                         DSL.field("release_year")
                 )
                 .from("film")
-                .where("1=1");
-        if (title != null) {
-            query = query.and(DSL.field("title").like("%" + title + "%"));
-        }
-        if (description != null) {
-            query = query.and(DSL.field("description").like("%" + description + "%"));
-        }
-        if (releaseYear != null) {
-            query = query.and(DSL.field("release_year").eq(releaseYear));
-        }
-        System.out.println(query.getSQL());
-        return query.fetch()
+                .where(conditions)
+                .fetch()
                 .map(r -> Film.fromRecord(r));
     }
 
     @GET
     @Path("/films/{actor}")
     public List<FullFilm> getFilmsByActor(@PathParam("actor") @NotNull Integer actor) {
-        SelectConditionStep<Record7<Object, Object, Object, Object, Object, Object, Object>> query = dsl.select(
+        return dsl.select(
                         DSL.field("film.film_id"),
                         DSL.field("film.title"),
                         DSL.field("film.description"),
@@ -89,16 +89,20 @@ public class DemoResource {
                 .from("film")
                 .join("film_actor").on("film_actor.film_id = film.film_id")
                 .join("actor").on("film_actor.actor_id = actor.actor_id")
-                .where(DSL.field("actor.actor_id").eq(actor));
-
-        return query.fetch()
+                .where(DSL.field("actor.actor_id").eq(actor))
+                .fetch()
                 .map(r -> FullFilm.fromRecord(r));
     }
 
     @GET
     @Path("/filmsAndActors")
     public List<FullFilm> getFullFilms(@QueryParam("actor") String actor) {
-        SelectConditionStep<Record7<Object, Object, Object, Object, Object, Object, Object>> query = dsl.select(
+        List<Condition> conditions = new ArrayList<>();
+        if (actor != null) {
+            conditions.add(DSL.field("actor.last_name").eq(actor));
+        }
+
+        return dsl.select(
                         DSL.field("film.film_id"),
                         DSL.field("film.title"),
                         DSL.field("film.description"),
@@ -110,11 +114,8 @@ public class DemoResource {
                 .from("film")
                 .join("film_actor").on("film_actor.film_id = film.film_id")
                 .join("actor").on("film_actor.actor_id = actor.actor_id")
-                .where("1=1");
-        if (actor != null) {
-            query = query.and("actor.last_name = ?", actor);
-        }
-        return query.fetch()
+                .where(conditions)
+                .fetch()
                 .map(r -> FullFilm.fromRecord(r));
     }
 

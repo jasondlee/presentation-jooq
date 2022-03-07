@@ -9,6 +9,16 @@ public class ActorModel {
     private String lastName;
     private String firstName;
 
+    public ActorModel() {
+
+    }
+
+    public ActorModel(Integer id, String lastName, String firstName) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+    }
+
     public Integer getId() {
         return id;
     }
