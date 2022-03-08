@@ -24,7 +24,8 @@ public class AddressModel {
         this.phone = phone;
     }
 
-    public AddressModel(Integer addressId, String address, String address2, String district, CityModel city,
+    public AddressModel(Integer addressId, String address, String address2,
+                        String district, CityModel city,
                         String postalCode, String phone, LocalDateTime lastUpdate) {
         this.addressId = addressId;
         this.address = address;

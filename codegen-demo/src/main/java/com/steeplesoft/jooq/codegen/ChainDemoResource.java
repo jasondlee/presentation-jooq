@@ -3,9 +3,12 @@ package com.steeplesoft.jooq.codegen;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steeplesoft.jooq.codegen.model.AddressModel;
+import com.steeplesoft.jooq.codegen.model.CityModel;
+import com.steeplesoft.jooq.codegen.model.CountryModel;
 import com.steeplesoft.jooq.codegen.model.StaffModel;
 import com.steeplesoft.jooq.codegen.model.StoreModel;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -39,8 +42,15 @@ public class ChainDemoResource {
                                 STORE.address().ADDRESS_ID,
                                 STORE.address().ADDRESS_,
                                 STORE.address().ADDRESS2,
+                                STORE.address().DISTRICT,
+                                row(
+                                        STORE.address().city().CITY_ID,
+                                        STORE.address().city().CITY_,
+                                        STORE.address().city().LAST_UPDATE
+                                ).mapping(CityModel::new).as("city"),
                                 STORE.address().POSTAL_CODE,
-                                STORE.address().PHONE
+                                STORE.address().PHONE,
+                                STORE.address().LAST_UPDATE
                         ).mapping(AddressModel::new).as("address"),
                         multiset(
                                 select(
