@@ -45,6 +45,7 @@
                         </target>
 
                         <generate>
+                            <pojos>false</pojos>
                             <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>
                             <javaTimeTypes>true</javaTimeTypes>
                             <fluentSetters>true</fluentSetters>
