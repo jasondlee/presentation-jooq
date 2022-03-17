@@ -3,10 +3,10 @@ package com.steeplesoft.jooq.basic.model;
 import org.jooq.Record;
 
 public class Film {
-    private Long id;
-    private String title;
-    private String description;
-    private int releaseYear;
+    protected Long id;
+    protected String title;
+    protected String description;
+    protected int releaseYear;
 
     public static Film fromRecord(Record r) {
         return new Film()
@@ -50,5 +50,15 @@ public class Film {
     public Film setReleaseYear(int releaseYear) {
         this.releaseYear = releaseYear;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", releaseYear=" + releaseYear +
+                '}';
     }
 }

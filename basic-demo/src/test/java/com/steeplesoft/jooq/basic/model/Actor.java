@@ -40,4 +40,13 @@ public class Actor {
                 .setFirstName(r.getValue("first_name", String.class))
                 .setLastName(r.getValue("last_name", String.class));
     }
+
+    @Override
+    public String toString() {
+        return "Actor{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                '}';
+    }
 }
