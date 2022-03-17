@@ -66,9 +66,9 @@
             </ul>
         </li>
         <li>Former president <a href="https://okcjug.org">Oklahoma City Java Users Group</a></li>
-        <li><a href="https://www.packtpub.com/application-development/java-9-programming-blueprints">Book Author</a>
+        <li><a href="https://www.packtpub.com/application-development/java-9-programming-blueprints">Book Author - Java 9 Programming Blueprints</a>
         </li>
-        <li><a href="https://jasondl.ee">Blogger</a></li>
+        <li><a href="https://jasondl.ee">Blogger - https://jasondl.ee</a></li>
     </ul>
 </section>
 
@@ -77,9 +77,10 @@
     <ul>
         <li>“[O]riginally...created as a library for complete abstraction of JDBC and all database interaction”</li>
         <li>Type-safe SQL building</li>
+        <li>SQL dialect abstraction</li>
         <li>Improved query execution and data retrieval API</li>
         <li>Active Records</li>
-        <li>SQL dialect abstraction</li>
+        <li>So much more...</li>
     </ul>
 </section>
 
@@ -113,7 +114,7 @@
 
 <section class="slide">
     <h2>Supported Databases</h2>
-    <span class="next">What databases are supported</span>
+    <span class="next">What databases are supported?</span>
     <span class="next shout">All of them!</span>
 </section>
 
@@ -159,12 +160,12 @@
     <pre><code>&lt;dependency&gt;
     &lt;groupId&gt;org.jooq&lt;/groupId&gt;
     &lt;artifactId&gt;jooq&lt;/artifactId&gt;
-    &lt;version&gt;3.16.3&lt;/version&gt;
+    &lt;version&gt;3.16.5&lt;/version&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.jooq&lt;/groupId&gt;
     &lt;artifactId&gt;jooq-meta&lt;/artifactId&gt;
-    &lt;version&gt;3.16.3&lt;/version&gt;
+    &lt;version&gt;3.16.5&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </section>
 
@@ -173,8 +174,8 @@
     <div class="next">You're on your own</div>
     <div class="next">Just kidding!
         <pre class="next"><code>dependencies {
-    compile 'org.jooq:jooq:3.16.3'
-    compile 'org.jooq:jooq-meta:3.16.3'
+    compile 'org.jooq:jooq:3.16.5'
+    compile 'org.jooq:jooq-meta:3.16.5'
 }</code></pre>
     </div>
 </section>
@@ -218,7 +219,7 @@ DSLContext context = DSL.using(configuration);
         DSL.field("last_name"),
         DSL.field("first_name")
 )
-.from("actor")
+.from(DSL.table("actor"))
         </code></pre></p>
 </section>
 
@@ -226,7 +227,7 @@ DSLContext context = DSL.using(configuration);
     <h2>Fetching data - non-codegen</h2>
     <p>Query:
         <pre><code>dsl.select(...)
-        .from("actor")
+        .from(DSL.table("actor"))
         <mark class="important">.fetch())
     .map(r -> Author.fromRecord(r))
     .collect(Collectors.toList())</mark></code></pre></p>
