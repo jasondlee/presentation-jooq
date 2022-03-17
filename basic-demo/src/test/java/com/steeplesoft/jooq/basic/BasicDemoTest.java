@@ -86,7 +86,6 @@ public class BasicDemoTest {
                             .withExecuteLogging(true)
                             .withRenderCatalog(false)
                             .withRenderSchema(false)
-                            .withExecuteLogging(true)
                             .withRenderQuotedNames(RenderQuotedNames.EXPLICIT_DEFAULT_UNQUOTED)
                             .withRenderNameCase(RenderNameCase.LOWER_IF_UNQUOTED)
                     );

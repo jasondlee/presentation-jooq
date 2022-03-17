@@ -3,9 +3,9 @@ package com.steeplesoft.jooq.codegen.model;
 import java.time.LocalDateTime;
 
 public class CityModel {
-    private Integer cityId;
-    private String city;
-    private LocalDateTime lastUpdate;
+    protected Integer cityId;
+    protected String city;
+    protected LocalDateTime lastUpdate;
 
     public CityModel() {
 
@@ -39,5 +39,14 @@ public class CityModel {
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public String toString() {
+        return "CityModel{" +
+                "cityId=" + cityId +
+                ", city='" + city + '\'' +
+                ", lastUpdate=" + lastUpdate +
+                '}';
     }
 }

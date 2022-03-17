@@ -27,14 +27,8 @@ import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 
-@Path("/chain")
-@Produces(MediaType.APPLICATION_JSON)
-public class ChainDemoResource {
-    @Inject
-    private ObjectMapper mapper;
-
-    @Inject
-    private DSLContext dsl;
+public class ChainDemoTest {
+    private DSLContext dsl = DslContextProvider.getDslContext();
 
     @GET
     public List<StoreModel> chainedStoresAndStaff() throws JsonProcessingException {
@@ -48,7 +42,8 @@ public class ChainDemoResource {
                 .map(r -> new StoreModel(r.get(STORE.STORE_ID),
                         (AddressModel) r.get("address"),
                         (List<StaffModel>) r.get("staff")));
-        System.out.println(mapper.writeValueAsString(stores));
+
+        System.out.println(stores);
         return stores;
     }
 
