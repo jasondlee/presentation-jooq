@@ -5,9 +5,9 @@ import org.jooq.Record;
 import static com.steeplesoft.jooq_demo.generated.tables.Actor.ACTOR;
 
 public class ActorModel {
-    private Integer id;
-    private String lastName;
-    private String firstName;
+    protected Integer id;
+    protected String lastName;
+    protected String firstName;
 
     public ActorModel() {
 
@@ -51,5 +51,14 @@ public class ActorModel {
                 .setId(r.getValue(ACTOR.ACTOR_ID))
                 .setFirstName(r.getValue(ACTOR.FIRST_NAME))
                 .setLastName(r.getValue(ACTOR.LAST_NAME));
+    }
+
+    @Override
+    public String toString() {
+        return "ActorModel{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                '}';
     }
 }

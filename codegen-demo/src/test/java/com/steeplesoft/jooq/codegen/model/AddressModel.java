@@ -3,14 +3,14 @@ package com.steeplesoft.jooq.codegen.model;
 import java.time.LocalDateTime;
 
 public class AddressModel {
-    private Integer addressId;
-    private String address;
-    private String address2;
-    private String district;
-    private CityModel city;
-    private String postalCode;
-    private String phone;
-    private LocalDateTime lastUpdate;
+    protected Integer addressId;
+    protected String address;
+    protected String address2;
+    protected String district;
+    protected CityModel city;
+    protected String postalCode;
+    protected String phone;
+    protected LocalDateTime lastUpdate;
 
     public AddressModel() {
 
@@ -99,5 +99,19 @@ public class AddressModel {
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressModel{" +
+                "addressId=" + addressId +
+                ", address='" + address + '\'' +
+                ", address2='" + address2 + '\'' +
+                ", district='" + district + '\'' +
+                ", city=" + city +
+                ", postalCode='" + postalCode + '\'' +
+                ", phone='" + phone + '\'' +
+                ", lastUpdate=" + lastUpdate +
+                '}';
     }
 }

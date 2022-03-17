@@ -6,7 +6,7 @@ import static com.steeplesoft.jooq_demo.generated.tables.Actor.ACTOR;
 import static com.steeplesoft.jooq_demo.generated.tables.Film.FILM;
 
 public class FullFilmModel extends FilmModel {
-    private ActorModel actorModel;
+    protected ActorModel actorModel;
 
     public ActorModel getActor() {
         return actorModel;
@@ -29,5 +29,16 @@ public class FullFilmModel extends FilmModel {
                 .setLastName(r.get(ACTOR.LAST_NAME)));
 
         return film;
+    }
+
+    @Override
+    public String toString() {
+        return "FullFilmModel{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", releaseYear=" + releaseYear +
+                ", actorModel=" + actorModel +
+                '}';
     }
 }

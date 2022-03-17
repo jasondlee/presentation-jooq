@@ -5,10 +5,10 @@ import org.jooq.Record;
 import static com.steeplesoft.jooq_demo.generated.tables.Film.FILM;
 
 public class FilmModel {
-    private Integer id;
-    private String title;
-    private String description;
-    private Integer releaseYear;
+    protected Integer id;
+    protected String title;
+    protected String description;
+    protected Integer releaseYear;
 
     public FilmModel() {
     }
@@ -62,5 +62,15 @@ public class FilmModel {
     public FilmModel setReleaseYear(Integer releaseYear) {
         this.releaseYear = releaseYear;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "FilmModel{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", releaseYear=" + releaseYear +
+                '}';
     }
 }

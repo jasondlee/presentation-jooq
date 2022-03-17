@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 import static com.steeplesoft.jooq_demo.generated.tables.Store.STORE;
 
 public class StaffModel {
-    private Integer staffId;
-    private String firstName;
-    private String lastName;
-    private String userName;
-    private String email;
-    private LocalDateTime lastUpdate;
+    protected Integer staffId;
+    protected String firstName;
+    protected String lastName;
+    protected String userName;
+    protected String email;
+    protected LocalDateTime lastUpdate;
 
     public StaffModel() {
     }
@@ -73,12 +73,16 @@ public class StaffModel {
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
-//    public static StaffModel fromRecord(StaffRecord r) {
-//        STORE.staff().STAFF_ID,
-//                STORE.staff().FIRST_NAME,
-//                STORE.staff().LAST_NAME,
-//                STORE.staff().USERNAME,
-//                STORE.staff().EMAIL,
-//                STORE.staff().LAST_UPDATE
-//    }
+
+    @Override
+    public String toString() {
+        return "StaffModel{" +
+                "staffId=" + staffId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", lastUpdate=" + lastUpdate +
+                '}';
+    }
 }

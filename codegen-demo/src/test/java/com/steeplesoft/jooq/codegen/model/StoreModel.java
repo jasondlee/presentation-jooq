@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StoreModel {
-    private Integer storeId;
-    private AddressModel address;
-    private List<StaffModel> staff = new ArrayList<>();;
+    protected Integer storeId;
+    protected AddressModel address;
+    protected List<StaffModel> staff = new ArrayList<>();;
 
     public StoreModel() {
         System.out.println("");
@@ -40,5 +40,14 @@ public class StoreModel {
 
     public void setAddress(AddressModel address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "StoreModel{" +
+                "storeId=" + storeId +
+                ", address=" + address +
+                ", staff=" + staff +
+                '}';
     }
 }

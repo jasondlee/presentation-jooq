@@ -27,4 +27,15 @@ public class FullFilm extends Film {
 
         return film;
     }
+
+    @Override
+    public String toString() {
+        return "FullFilm{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", releaseYear=" + releaseYear +
+                ", actor=" + actor +
+                '}';
+    }
 }
