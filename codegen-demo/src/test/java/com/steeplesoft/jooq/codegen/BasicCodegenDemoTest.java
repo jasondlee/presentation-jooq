@@ -1,11 +1,14 @@
 package com.steeplesoft.jooq.codegen;
 
 import com.steeplesoft.jooq.codegen.model.ActorModel;
+import com.steeplesoft.jooq.codegen.model.CustomerModel;
 import com.steeplesoft.jooq.codegen.model.FilmModel;
 import com.steeplesoft.jooq.codegen.model.FullFilmModel;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.SQLDialect;
+import org.jooq.SelectConditionStep;
 import org.jooq.conf.RenderNameCase;
 import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.steeplesoft.jooq_demo.generated.tables.Actor.ACTOR;
+import static com.steeplesoft.jooq_demo.generated.tables.Customer.CUSTOMER;
 import static com.steeplesoft.jooq_demo.generated.tables.Film.FILM;
 import static com.steeplesoft.jooq_demo.generated.tables.FilmActor.FILM_ACTOR;
 
@@ -26,7 +30,7 @@ public class BasicCodegenDemoTest {
     private DSLContext dsl = DslContextProvider.getDslContext();
 
     @Test
-    public void getActors() {
+    public void simpleSelect() {
         List<ActorModel> actors = dsl.fetch(ACTOR)
                 .map(r -> ActorModel.fromRecord(r));
 
@@ -34,17 +38,48 @@ public class BasicCodegenDemoTest {
     }
 
     @Test
-    public void getFilms() {
-        List<FilmModel> films = dsl.select()
+    public void simpleFilter() {
+        SelectConditionStep<Record> query = dsl.select()
                 .from(FILM)
-                .where(FILM.TITLE.like("%THE%"))
+                .where(FILM.TITLE.like("%THE%"));
+        System.out.println(query);
+        List<FilmModel> films = query
                 .fetch().map(r -> FilmModel.fromRecord(r));
 
         System.out.println(films);
     }
 
     @Test
-    public void getFilmsByActor() {
+    public void complexFilter() {
+        SelectConditionStep<Record> query = dsl.select()
+                .from(CUSTOMER)
+                .where(CUSTOMER.FIRST_NAME.eq("MARION"))
+                .and(CUSTOMER.LAST_NAME.eq("SNYDER"));
+        System.out.println(query);
+        List<CustomerModel> customers = query
+                .fetch().map(r -> CustomerModel.fromRecord(r));
+
+        System.out.println(customers);
+    }
+
+    @Test
+    public void moreComplexFilter() {
+        SelectConditionStep<Record> query = dsl.select()
+                .from(CUSTOMER)
+                .where(CUSTOMER.FIRST_NAME.eq("MARION")
+                    .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
+                .or(CUSTOMER.FIRST_NAME.eq("TERRY")
+                    .and(CUSTOMER.LAST_NAME.eq("GRISSOM")));
+        System.out.println(query);
+
+        List<CustomerModel> customers = query
+                .fetch().map(r -> CustomerModel.fromRecord(r));
+
+        System.out.println(customers);
+    }
+
+    @Test
+    public void complexJoins() {
         List<FullFilmModel> fullFilms = dsl.select(
                         FILM.FILM_ID,
                         FILM.TITLE,

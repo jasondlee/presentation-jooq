@@ -12,6 +12,7 @@ EOF
     #postgres-sakila-drop-objects.sql \
 
 psql -q -U postgres -d jooq_demo -f postgres-sakila-schema.sql
+psql -q -U postgres -d jooq_demo -f jooq_demo.sql
 
 psql -q -U postgres -d jooq_demo << EOF
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO jooq_demo;

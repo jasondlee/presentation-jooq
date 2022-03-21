@@ -1,7 +1,5 @@
 package com.steeplesoft.jooq.codegen;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steeplesoft.jooq.codegen.model.AddressModel;
 import com.steeplesoft.jooq.codegen.model.CityModel;
 import com.steeplesoft.jooq.codegen.model.StaffModel;
@@ -10,14 +8,8 @@ import com.steeplesoft.jooq_demo.generated.tables.Address;
 import com.steeplesoft.jooq_demo.generated.tables.City;
 import com.steeplesoft.jooq_demo.generated.tables.Staff;
 import org.jooq.DSLContext;
-import org.jooq.Field;
 import org.jooq.SelectField;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 import static com.steeplesoft.jooq_demo.generated.tables.Staff.STAFF;
@@ -30,8 +22,7 @@ import static org.jooq.impl.DSL.select;
 public class ChainDemoTest {
     private DSLContext dsl = DslContextProvider.getDslContext();
 
-    @GET
-    public List<StoreModel> chainedStoresAndStaff() throws JsonProcessingException {
+    public List<StoreModel> chainedStoresAndStaff()      {
         List<StoreModel> stores = dsl.select(
                         STORE.STORE_ID,
                         addressRow(STORE.address()),

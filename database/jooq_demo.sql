@@ -11,13 +11,14 @@ CREATE TABLE books
     title          text,
     description    text,
     published_year int,
-    author_id      int REFERENCES authors (id)
+    author_id      int -- REFERENCES authors (id)
 );
 
 INSERT INTO authors (id, last_name, first_name)
 VALUES (1, 'Tolkien', 'J.R.R.'),
        (2, 'Lewis', 'C.S'),
-       (3, 'Sanderson', 'Brandon');
+       (3, 'Sanderson', 'Brandon'),
+       (4, 'Tom', 'Clancy');
 
 INSERT INTO books (id, title, description, published_year, author_id)
 VALUES
@@ -55,5 +56,8 @@ VALUES
        (27, 'Shadows of Self', '', 2015, 3),
        (28, 'The Bands of Mourning', '', 2016, 3),
        (29, 'Oathbringer', '', 2017, 3),
-       (30, 'Rhythm of War', '', 2005, 3)
+       (30, 'Rhythm of War', '', 2005, 3),
+
+       -- Bad Data
+       (31, 'Lions of Lucerne', 'On the snow-covered slopes of Utah, the unthinkable has just become a nightmarish reality...', 2002, 5)
 ;

@@ -71,6 +71,6 @@ public class FilmModel {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", releaseYear=" + releaseYear +
-                '}';
+                "}\n";
     }
 }

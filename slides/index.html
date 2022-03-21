@@ -32,6 +32,10 @@
         code {
             font-size: 18px;
         }
+
+        .slide pre {
+            margin-bottom: 0px;
+        }
     </style>
 </head>
 <body class="shower list">
@@ -267,7 +271,6 @@ DSLContext context = DSL.using(configuration);
     <div>Options:
         <ul class="next">
             <li class="next">XML (commandline and Maven)</li>
-            <li class="next">Programmatic</li>
             <li class="next">Gradle</li>
         </ul>
     </div>
@@ -289,6 +292,246 @@ DSLContext context = DSL.using(configuration);
     &lt;/execution&gt;
   &lt;/executions&gt;
 &lt;/plugin&gt;</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Generating Code - XML (cont)</h2>
+    <pre class="next"><code style="font-size: 12px; line-height: 1.5;">&lt;configuration&gt;
+    &lt;jdbc&gt;
+        &lt;url&gt;${jdbc.url}&lt;/url&gt;
+        &lt;user&gt;${jdbc.user}&lt;/user&gt;
+        &lt;password&gt;${jdbc.password}&lt;/password&gt;
+        &lt;schema&gt;public&lt;/schema&gt;
+    &lt;/jdbc&gt;
+    &lt;generator&gt;
+        &lt;database&gt;
+            &lt;name&gt;org.jooq.meta.postgres.PostgresDatabase&lt;/name&gt;
+            &lt;includes&gt;.*&lt;/includes&gt;
+            &lt;inputSchema&gt;public&lt;/inputSchema&gt;
+            &lt;outputSchema&gt;public&lt;/outputSchema&gt;
+        &lt;/database&gt;
+        &lt;target&gt;
+            &lt;packageName&gt;com.steeplesoft.jooq_demo.generated&lt;/packageName&gt;
+            &lt;directory&gt;${jooq.outputdir}&lt;/directory&gt;
+        &lt;/target&gt;
+    &lt;/generator&gt;
+&lt;/configuration&gt;</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Generating Code - XML (cont)</h2>
+    <pre class="next"><code style="font-size: 14px; line-height: 1.5;">$ mvn generate-sources
+...
+[INFO] Generating catalog       : DefaultCatalog.java
+[INFO] ==========================================================
+[INFO] Generating schemata      : Total: 1
+[INFO] No schema version is applied for schema public. Regenerating.
+[INFO] Generating schema        : Public.java
+[INFO] ----------------------------------------------------------
+[INFO] Tables fetched           : 31 (31 included, 0 excluded)
+[INFO] Enums fetched            : 1 (1 included, 0 excluded)
+[INFO] UDTs fetched             : 0 (0 included, 0 excluded)
+[INFO] Sequences fetched        : 0 (0 included, 0 excluded)
+[INFO] Generating tables
+[INFO] Embeddables fetched      : 0 (0 included, 0 excluded)
+[INFO] Generating table         : Actor.java [input=actor, output=actor, pk=actor_pkey]
+</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Generating Code - XML + CLI</h2>
+    <div class="next">Maven <code>configuration</code> saved in external file (e.g., jooq.xml)</div>
+    <div class="next">File pre-amble:
+        <pre><code style="font-size: 14px; line-height: 1.5;">    &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+        &lt;configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.5.xsd"&gt;</code></pre></div>
+    <div class="next">Command-line:
+        <pre><code style="font-size: 14px; line-height: 1.5;">$ java -classpath jooq-3.16.5.jar:\
+    jooq-meta-3.16.5.jar:jooq-codegen-3.16.5.jar:\
+    reactive-streams-1.0.3.jar:r2dbc-spi-0.9.0.RELEASE.jar:\
+    jakarta.xml.bind-api-3.0.0.jar:mysql-connector-java.jar:. \
+    org.jooq.codegen.GenerationTool jooq.xml</code></pre>
+    </div>
+</section>
+
+<section class="slide">
+    <h2>Generating Code - Gradle</h2>
+    <ul>
+        <li class="next">Recommended to use the Gradle plugin by Etienne Studer (from Gradle Inc.).</li>
+        <li class="next">Examples at
+            <a href="https://github.com/etiennestuder/gradle-jooq-plugin/tree/master/example">
+                https://github.com/etiennestuder/gradle-jooq-plugin/tree/master/example
+            </a>
+        </li>
+        <li class="next">Programmatic:
+            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">GenerationTool.generate(new Configuration()
+    .withJdbc(new Jdbc()
+        .withDriver('org.h2.Driver')
+        .withUrl('jdbc:h2:~/test-gradle')
+        .withUser('sa')
+        .withPassword(''))
+    .withGenerator(new Generator()) // ...</code></pre>
+        </li>
+        <li class="next"><a href="https://www.jooq.org/doc/3.16/manual/code-generation/codegen-gradle/#alternatively-programmatic-configuration-can-be-used">Full example</a></li>
+    </ul>
+</section>
+
+<section class="slide textwbg" id="getonwithit">
+    <h2 class="shout shrink">Get on with it!!</h2>
+    <figure>
+        <img class="cover width" src="pictures/getonwithit.jpg" alt="Get on with it!">
+    </figure>
+</section>
+
+<section class="slide">
+    <h2>Writing queries - Codegen</h2>
+    <p class="next">Old:<pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select(
+        DSL.field("actor_id"),
+        DSL.field("last_name"),
+        DSL.field("first_name")
+)
+.from(DSL.table("actor"))</code></pre></p>
+    <p class="next">Code gen:
+        <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.fetch(ACTOR)</code></pre>
+    </p>
+</section>
+
+<section class="slide">
+    <h2>Filtering Data</h2>
+    <ul>
+        <li class="next">Simple
+            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+    .from(FILM)
+    .where(FILM.TITLE.like("%THE%"))</code></pre>
+        </li>
+        <li class="next">SQL:
+            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">select
+  film.film_id,
+  film.title,
+  ...
+  film.fulltext
+from film
+where film.title like '%THE%'</code></pre>
+        </li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Filtering Data (cont)</h2>
+    <ul>
+        <li>More complex
+            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+    .from(CUSTOMER)
+    .where(CUSTOMER.FIRST_NAME.eq("MARION"))
+    .and(CUSTOMER.LAST_NAME.eq("SNYDER"))</code></pre>
+        </li>
+        <li class="next">SQL:
+        <pre><code style="font-size: 14px; line-height: 1.5;">select
+  customer.customer_id,
+  ...
+  customer.active
+from customer
+where (
+  customer.first_name = 'MARION'
+  and customer.last_name = 'SNYDER'
+)</code></pre></li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Filter Data (cont)</h2>
+    <ul>
+        <li class="next">One more:
+        <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
+    .where(CUSTOMER.FIRST_NAME.eq("MARION")).and(CUSTOMER.LAST_NAME.eq("SNYDER"))
+    .or(CUSTOMER.FIRST_NAME.eq("TERRY")).and(CUSTOMER.LAST_NAME.eq("GRISSOM"))</code></pre></li>
+        <li class="next">SQL:
+        <pre><code style="font-size: 14px; line-height: 1.5;">select ... from customer
+where (
+  (
+    (
+      customer.first_name = 'MARION'
+      and customer.last_name = 'SNYDER'
+    )
+    or customer.first_name = 'TERRY'
+  )
+  and customer.last_name = 'GRISSOM')</code></pre></li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Filter Data (cont)</h2>
+    <ul>
+        <li>I lied. Let's fix it.:
+        <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
+    .where(CUSTOMER.FIRST_NAME.eq("MARION")
+        .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
+    .or(CUSTOMER.FIRST_NAME.eq("TERRY")
+        .and(CUSTOMER.LAST_NAME.eq("GRISSOM")))</code></pre></li>
+        <li class="next">SQL:
+        <pre><code style="font-size: 14px; line-height: 1.5;">where (
+  (
+    customer.first_name = 'MARION'
+    and customer.last_name = 'SNYDER'
+  ) or (
+    customer.first_name = 'TERRY'
+    and customer.last_name = 'GRISSOM'
+  )
+)</code></pre></li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Joins</h2>
+    <ul>
+        <li>Join types supported:
+            <ul>
+                <li class="next">Cross - Cartesian product</li>
+                <li class="next">Inner - Values in both tables</li>
+                <li class="next">Outer - Value from one table, null from the other (LEFT, RIGHT, and FULL)</li>
+                <li class="next">Semi - "existence of rows from one table in another table (using EXISTS or IN)"</li>
+                <li class="next">Anti - "non-existence of rows from one table in another table (using NOT EXISTS or some conditions NOT IN)"</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Joins - Cross</h2>
+    <p>No <code>WHERE</code> class allowed.</p>
+    <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+    .from(STORE)
+    .crossJoin(STAFF)
+    .fetch();</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Joins - Inner</h2>
+    <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+    .from(STORE)
+        .join(STAFF)
+            .on(STORE.STORE_ID.eq(STAFF.STORE_ID))
+    .fetch();</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Joins - Outer</h2>
+    <ul>
+        <li class="next">Left outer join:
+            <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+    .from(AUTHORS)
+    .leftOuterJoin(BOOKS).on(AUTHORS.ID.eq(BOOKS.AUTHOR_ID))</code></pre>
+        </li>
+        <li class="next">Right outer join:
+            <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+    .from(AUTHORS)
+    .rightOuterJoin(BOOKS).on(AUTHORS.ID.eq(BOOKS.AUTHOR_ID))</code></pre>
+        </li>
+        <li class="next">Full outer join:
+            <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+    .from(AUTHORS)
+    .fullOuterJoin(BOOKS).on(AUTHORS.ID.eq(BOOKS.AUTHOR_ID))</code></pre>
+        </li>
+    </ul>
 </section>
 
 <footer class="badge">

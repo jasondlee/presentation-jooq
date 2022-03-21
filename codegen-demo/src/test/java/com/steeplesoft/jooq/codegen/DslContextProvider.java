@@ -23,11 +23,12 @@ class DslContextProvider {
                     .set(conn)
                     .set(SQLDialect.POSTGRES)
                     .set(new Settings()
-//                            .withExecuteLogging(true)
-                                    .withRenderCatalog(false)
-                                    .withRenderSchema(false)
-                                    .withRenderQuotedNames(RenderQuotedNames.EXPLICIT_DEFAULT_UNQUOTED)
-                                    .withRenderNameCase(RenderNameCase.LOWER_IF_UNQUOTED)
+                            .withExecuteLogging(true)
+                            .withRenderCatalog(false)
+                            .withRenderSchema(false)
+                            .withMaxRows(Integer.MAX_VALUE)
+                            .withRenderQuotedNames(RenderQuotedNames.EXPLICIT_DEFAULT_UNQUOTED)
+                            .withRenderNameCase(RenderNameCase.LOWER_IF_UNQUOTED)
                     );
 
             return DSL.using(configuration);
