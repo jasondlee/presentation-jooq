@@ -62,6 +62,7 @@
 
                         <generate>
                             <pojos>false</pojos>
+                            <daos>false</daos>
                             <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>
                             <javaTimeTypes>true</javaTimeTypes>
                             <fluentSetters>true</fluentSetters>

@@ -70,7 +70,8 @@
             </ul>
         </li>
         <li>Former president <a href="https://okcjug.org">Oklahoma City Java Users Group</a></li>
-        <li><a href="https://www.packtpub.com/application-development/java-9-programming-blueprints">Book Author - Java 9 Programming Blueprints</a>
+        <li><a href="https://www.packtpub.com/application-development/java-9-programming-blueprints">Book Author - Java
+            9 Programming Blueprints</a>
         </li>
         <li><a href="https://jasondl.ee">Blogger - https://jasondl.ee</a></li>
     </ul>
@@ -218,28 +219,32 @@ DSLContext context = DSL.using(configuration);
 
 <section class="slide">
     <h2>Writing queries - non-codegen</h2>
-    <p><pre><code>dsl.select(
+    <p>
+    <pre><code>dsl.select(
         DSL.field("actor_id"),
         DSL.field("last_name"),
         DSL.field("first_name")
 )
 .from(DSL.table("actor"))
-        </code></pre></p>
+        </code></pre>
+    </p>
 </section>
 
 <section class="slide">
     <h2>Fetching data - non-codegen</h2>
     <p>Query:
-        <pre><code>dsl.select(...)
+    <pre><code>dsl.select(...)
         .from(DSL.table("actor"))
         <mark class="important">.fetch())
     .map(r -> Author.fromRecord(r))
-    .collect(Collectors.toList())</mark></code></pre></p>
+    .collect(Collectors.toList())</mark></code></pre>
+    </p>
 </section>
 
 <section class="slide">
     <h2>Fetching data - non-codegen (cont)</h2>
-    <p>Fetching:<pre><code>public class Actor {
+    <p>Fetching:
+    <pre><code>public class Actor {
     public static Actor fromRecord(Record r) {
         return new Actor()
                 .setId(r.getValue("actor_id", Long.class))
@@ -343,7 +348,8 @@ DSLContext context = DSL.using(configuration);
     <div class="next">Maven <code>configuration</code> saved in external file (e.g., jooq.xml)</div>
     <div class="next">File pre-amble:
         <pre><code style="font-size: 14px; line-height: 1.5;">    &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
-        &lt;configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.5.xsd"&gt;</code></pre></div>
+        &lt;configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.5.xsd"&gt;</code></pre>
+    </div>
     <div class="next">Command-line:
         <pre><code style="font-size: 14px; line-height: 1.5;">$ java -classpath jooq-3.16.5.jar:\
     jooq-meta-3.16.5.jar:jooq-codegen-3.16.5.jar:\
@@ -371,7 +377,9 @@ DSLContext context = DSL.using(configuration);
         .withPassword(''))
     .withGenerator(new Generator()) // ...</code></pre>
         </li>
-        <li class="next"><a href="https://www.jooq.org/doc/3.16/manual/code-generation/codegen-gradle/#alternatively-programmatic-configuration-can-be-used">Full example</a></li>
+        <li class="next"><a
+                href="https://www.jooq.org/doc/3.16/manual/code-generation/codegen-gradle/#alternatively-programmatic-configuration-can-be-used">Full
+            example</a></li>
     </ul>
 </section>
 
@@ -384,14 +392,16 @@ DSLContext context = DSL.using(configuration);
 
 <section class="slide">
     <h2>Writing queries - Codegen</h2>
-    <p class="next">Old:<pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select(
+    <p class="next">Old:
+    <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select(
         DSL.field("actor_id"),
         DSL.field("last_name"),
         DSL.field("first_name")
 )
-.from(DSL.table("actor"))</code></pre></p>
+.from(DSL.table("actor"))</code></pre>
+    </p>
     <p class="next">Code gen:
-        <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.fetch(ACTOR)</code></pre>
+    <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.fetch(ACTOR)</code></pre>
     </p>
 </section>
 
@@ -425,7 +435,7 @@ where film.title like '%THE%'</code></pre>
     .and(CUSTOMER.LAST_NAME.eq("SNYDER"))</code></pre>
         </li>
         <li class="next">SQL:
-        <pre><code style="font-size: 14px; line-height: 1.5;">select
+            <pre><code style="font-size: 14px; line-height: 1.5;">select
   customer.customer_id,
   ...
   customer.active
@@ -433,7 +443,8 @@ from customer
 where (
   customer.first_name = 'MARION'
   and customer.last_name = 'SNYDER'
-)</code></pre></li>
+)</code></pre>
+        </li>
     </ul>
 </section>
 
@@ -441,11 +452,12 @@ where (
     <h2>Filter Data (cont)</h2>
     <ul>
         <li class="next">One more:
-        <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
+            <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
     .where(CUSTOMER.FIRST_NAME.eq("MARION")).and(CUSTOMER.LAST_NAME.eq("SNYDER"))
-    .or(CUSTOMER.FIRST_NAME.eq("TERRY")).and(CUSTOMER.LAST_NAME.eq("GRISSOM"))</code></pre></li>
+    .or(CUSTOMER.FIRST_NAME.eq("TERRY")).and(CUSTOMER.LAST_NAME.eq("GRISSOM"))</code></pre>
+        </li>
         <li class="next">SQL:
-        <pre><code style="font-size: 14px; line-height: 1.5;">select ... from customer
+            <pre><code style="font-size: 14px; line-height: 1.5;">select ... from customer
 where (
   (
     (
@@ -454,7 +466,8 @@ where (
     )
     or customer.first_name = 'TERRY'
   )
-  and customer.last_name = 'GRISSOM')</code></pre></li>
+  and customer.last_name = 'GRISSOM')</code></pre>
+        </li>
     </ul>
 </section>
 
@@ -462,13 +475,14 @@ where (
     <h2>Filter Data (cont)</h2>
     <ul>
         <li>I lied. Let's fix it.:
-        <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
+            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
     .where(CUSTOMER.FIRST_NAME.eq("MARION")
         .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
     .or(CUSTOMER.FIRST_NAME.eq("TERRY")
-        .and(CUSTOMER.LAST_NAME.eq("GRISSOM")))</code></pre></li>
+        .and(CUSTOMER.LAST_NAME.eq("GRISSOM")))</code></pre>
+        </li>
         <li class="next">SQL:
-        <pre><code style="font-size: 14px; line-height: 1.5;">where (
+            <pre><code style="font-size: 14px; line-height: 1.5;">where (
   (
     customer.first_name = 'MARION'
     and customer.last_name = 'SNYDER'
@@ -476,7 +490,8 @@ where (
     customer.first_name = 'TERRY'
     and customer.last_name = 'GRISSOM'
   )
-)</code></pre></li>
+)</code></pre>
+        </li>
     </ul>
 </section>
 
@@ -489,7 +504,9 @@ where (
                 <li class="next">Inner - Values in both tables</li>
                 <li class="next">Outer - Value from one table, null from the other (LEFT, RIGHT, and FULL)</li>
                 <li class="next">Semi - "existence of rows from one table in another table (using EXISTS or IN)"</li>
-                <li class="next">Anti - "non-existence of rows from one table in another table (using NOT EXISTS or some conditions NOT IN)"</li>
+                <li class="next">Anti - "non-existence of rows from one table in another table (using NOT EXISTS or some
+                    conditions NOT IN)"
+                </li>
             </ul>
         </li>
     </ul>
@@ -533,6 +550,73 @@ where (
         </li>
     </ul>
 </section>
+
+<section class="slide">
+    <h2>Inserting Data</h2>
+    <p>Multiple ways:
+        <ul class="columns two">
+            <li>INSERT .. VALUES</li>
+            <li>INSERT .. DEFAULT VALUES</li>
+            <li>INSERT .. RETURNING</li>
+            <li>INSERT .. SELECT</li>
+            <li>INSERT .. SET</li>
+            <li>INSERT .. ON DUPLICATE KEY</li>
+        </ul>
+    </p>
+</section>
+
+<section class="slide">
+    <h2>Inserting Data: INSERT .. VALUES</h2>
+    <ul>
+        <li class="next">dsl.insertInto(&lt;Table&gt;, [field1, field2, ..., fieldN])</li>
+        <li class="next">Example:<pre><code style="font-size: 14px; line-height: 1.5;">dsl.insertInto(CUSTOMER,
+    CUSTOMER.CUSTOMER_ID, CUSTOMER.STORE_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME,
+        CUSTOMER.ADDRESS_ID, CUSTOMER.ACTIVE)
+    .values(1000, 1, "Dummy", "User", 1, 1)
+    .execute();</code></pre>
+        </li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Inserting Data: INSERT .. RETURNING</h2>
+    <pre><code style="font-size: 14px; line-height: 1.5;">Record1&lt;Integer&gt; record = dsl.insertInto(CUSTOMER,
+            CUSTOMER.STORE_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME,
+            CUSTOMER.ADDRESS_ID, CUSTOMER.ACTIVE)
+    .values(1, "Dummy", "User", 1, 1)
+    .returningResult(CUSTOMER.CUSTOMER_ID)
+    .fetchOne();
+Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Inserting Data: INSERT .. SET</h2>
+    <pre><code style="font-size: 14px; line-height: 1.5;">Record1&lt;Integer&gt; record = dsl.insertInto(CUSTOMER)
+        .set(CUSTOMER.STORE_ID, 1)
+        .set(CUSTOMER.FIRST_NAME, "Dummy")
+        .set(CUSTOMER.LAST_NAME, "User")
+        .set(CUSTOMER.ADDRESS_ID, 1)
+        .set(CUSTOMER.ACTIVE, 1)
+        .returningResult(CUSTOMER.CUSTOMER_ID)
+        .fetchOne();
+Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Updating Data</h2>
+    <ul>
+        <li class="next">Basic:
+            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">int count = dsl.update(CUSTOMER)
+    .set(CUSTOMER.ACTIVEBOOL, false)
+    .set(CUSTOMER.ACTIVE, 0)
+    .where(CUSTOMER.CUSTOMER_ID.eq(1))
+    .execute();</code></pre>
+        </li>
+        <li class="next">
+        </li>
+    </ul>
+</section>
+
 
 <footer class="badge">
     <a href="https://github.com/shower/shower">Fork me on GitHub</a>
