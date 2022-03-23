@@ -1,15 +1,11 @@
 package com.steeplesoft.jooq.codegen;
 
+import static com.steeplesoft.jooq_demo.generated.Tables.*;
+
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.junit.jupiter.api.Test;
-
-import static com.steeplesoft.jooq_demo.generated.Tables.ADDRESS;
-import static com.steeplesoft.jooq_demo.generated.Tables.AUTHORS;
-import static com.steeplesoft.jooq_demo.generated.Tables.BOOKS;
-import static com.steeplesoft.jooq_demo.generated.Tables.STAFF;
-import static com.steeplesoft.jooq_demo.generated.Tables.STORE;
 
 public class JoinDemoTest {
     private DSLContext dsl = DslContextProvider.getDslContext();
@@ -65,7 +61,24 @@ public class JoinDemoTest {
 
     @Test
     public void implicitJoin() {
-        Result results = dsl.select(
+        Result normal = dsl.select(
+                        STAFF.STAFF_ID,
+                        STAFF.LAST_NAME,
+                        STAFF.FIRST_NAME,
+                        STAFF.STORE_ID,
+                        ADDRESS.ADDRESS_,
+                        CITY.CITY_
+                ).from(STAFF)
+                .join(STORE).on(STAFF.STORE_ID.eq(STORE.STORE_ID))
+                .join(ADDRESS).on(STORE.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
+                .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))
+                .orderBy(
+                        STAFF.store().address().city().CITY_,
+                        STAFF.LAST_NAME, STAFF.FIRST_NAME
+                )
+                .fetch();
+
+        Result implicit = dsl.select(
                         STAFF.STAFF_ID,
                         STAFF.LAST_NAME,
                         STAFF.FIRST_NAME,
@@ -79,7 +92,8 @@ public class JoinDemoTest {
                 )
                 .fetch();
 
-        System.out.println(results);
+        System.out.println(normal);
+        System.out.println(implicit);
     }
 
     @Test

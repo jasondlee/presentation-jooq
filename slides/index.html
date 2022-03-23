@@ -552,6 +552,40 @@ where (
 </section>
 
 <section class="slide">
+    <h2>Joins - Implicit</h2>
+    <div>"Normal" way
+        <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select(
+            STAFF.STAFF_ID,
+            STAFF.LAST_NAME,
+            STAFF.FIRST_NAME,
+            STAFF.STORE_ID,
+            ADDRESS.ADDRESS_,
+            CITY.CITY_
+    ).from(STAFF)
+    .join(STORE).on(STAFF.STORE_ID.eq(STORE.STORE_ID))
+    .join(ADDRESS).on(STORE.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
+    .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))
+    .fetch();</code></pre>
+    </div>
+</section>
+
+<section class="slide">
+    <h2>Joins - Implicit (cont)</h2>
+    <div>Implicit join
+        <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select(
+            STAFF.STAFF_ID,
+            STAFF.LAST_NAME,
+            STAFF.FIRST_NAME,
+            STAFF.store().STORE_ID,
+            STAFF.store().address().ADDRESS_,
+            STAFF.store().address().city().CITY_
+    ).from(STAFF)
+    .fetch();</code></pre>
+    </div>
+</section>
+
+
+<section class="slide">
     <h2>Inserting Data</h2>
     <p>Multiple ways:
         <ul class="columns two">
@@ -612,9 +646,95 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
     .where(CUSTOMER.CUSTOMER_ID.eq(1))
     .execute();</code></pre>
         </li>
-        <li class="next">
+        <li class="next">Row value expression:
+            <pre><code style="font-size: 14px; line-height: 1.5;">int count = dsl.update(CUSTOMER)
+    .set(row(CUSTOMER.ACTIVEBOOL, CUSTOMER.ACTIVE),
+            row(true, 1))
+    .where(CUSTOMER.CUSTOMER_ID.eq(1))
+    .execute();</code></pre>
         </li>
     </ul>
+</section>
+
+<section class="slide">
+    <h2>Deleting Data</h2>
+    <pre class="next"><code style="font-size: 14px; line-height: 1.5;">int count = dsl.delete(CUSTOMER)
+    .where(CUSTOMER.CUSTOMER_ID.eq(1000))
+    .execute();</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Data Definition Language(DDL)</h2>
+    <p>You can alter the database schema itself as well:</p>
+    <ul class="next1 columns three" style="font-size: 16px;">
+        <li>ALTER DATABASE</li>
+        <li>ALTER DOMAIN</li>
+        <li>ALTER INDEX</li>
+        <li>ALTER SCHEMA</li>
+        <li>ALTER SEQUENCE</li>
+        <li>ALTER TABLE</li>
+        <li>ALTER TYPE</li>
+        <li>ALTER VIEW</li>
+        <li>DROP DATABASE</li>
+        <li>DROP DOMAIN</li>
+        <li>DROP FUNCTION</li>
+        <li>DROP INDEX</li>
+        <li>DROP PROCEDURE</li>
+        <li>DROP SCHEMA</li>
+        <li>DROP SEQUENCE</li>
+        <li>DROP TABLE</li>
+        <li>DROP TRIGGER</li>
+        <li>DROP TYPE</li>
+        <li>DROP VIEW</li>
+        <li>CREATE DATABASE</li>
+        <li>CREATE DOMAIN</li>
+        <li>CREATE FUNCTION</li>
+        <li>CREATE OR REPLACE FUNCTION</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Aggregate Functions</h2>
+    <ul class="columns three" style="font-size: 24px;">
+        <li>AVG</li>
+        <li>SUM</li>
+        <li>COUNT</li>
+        <li>MAX</li>
+        <li>MEDIAN</li>
+        <li>MIN</li>
+        <li>BOOL_AND</li>
+        <li>BOOL_OR</li>
+        <li>COLLECT</li>
+        <li>CUME_DIST</li>
+        <li>DENSE_RANK</li>
+        <li>EVERY</li>
+        <li>GROUP_CONCAT</li>
+        <li>JSON_ARRAYAGG</li>
+        <li>JSON_OBJECTAGG</li>
+        <li>LISTAGG</li>
+        <li>MODE</li>
+        <li>MULTISET_AGG</li>
+        <li>PERCENT_RANK</li>
+        <li>PERCENTILE_CONT</li>
+        <li>PERCENTILE_DISC</li>
+        <li>PRODUCT</li>
+        <li>RANK</li>
+        <li>XMLAGG</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry</h2>
+    <ul>
+        <li>RecordMappers</li>
+        <li>Nested Objects</li>
+        <li>Multisets</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - RecordMappers</h2>
+
 </section>
 
 

@@ -16,14 +16,6 @@ public class AddressModel {
 
     }
 
-    public AddressModel(Integer addressId, String address, String address2, String postalCode, String phone) {
-        this.addressId = addressId;
-        this.address = address;
-        this.address2 = address2;
-        this.postalCode = postalCode;
-        this.phone = phone;
-    }
-
     public AddressModel(Integer addressId, String address, String address2,
                         String district, CityModel city,
                         String postalCode, String phone, LocalDateTime lastUpdate) {

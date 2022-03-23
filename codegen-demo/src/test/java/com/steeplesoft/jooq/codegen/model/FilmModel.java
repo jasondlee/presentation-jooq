@@ -13,12 +13,12 @@ public class FilmModel {
     public FilmModel() {
     }
 
-    public FilmModel(Integer id, String title, String description, Integer releaseYear) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.releaseYear = releaseYear;
-    }
+//    public FilmModel(Integer id, String title, String description, Integer releaseYear) {
+//        this.id = id;
+//        this.title = title;
+//        this.description = description;
+//        this.releaseYear = releaseYear;
+//    }
 
     public static FilmModel fromRecord(Record r) {
         return new FilmModel()

@@ -23,20 +23,20 @@ public class CustomerModel {
 
     }
 
-    public CustomerModel(Integer customerId, Integer storeId, String firstName, String lastName, String email,
-                         Integer addressId, Boolean activeBool, LocalDate createDate, LocalDateTime lastUpdate,
-                         Integer active) {
-        this.customerId = customerId;
-        this.storeId = storeId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.addressId = addressId;
-        this.activeBool = activeBool;
-        this.createDate = createDate;
-        this.lastUpdate = lastUpdate;
-        this.active = active;
-    }
+//    public CustomerModel(Integer customerId, Integer storeId, String firstName, String lastName, String email,
+//                         Integer addressId, Boolean activeBool, LocalDate createDate, LocalDateTime lastUpdate,
+//                         Integer active) {
+//        this.customerId = customerId;
+//        this.storeId = storeId;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.email = email;
+//        this.addressId = addressId;
+//        this.activeBool = activeBool;
+//        this.createDate = createDate;
+//        this.lastUpdate = lastUpdate;
+//        this.active = active;
+//    }
 
     public Integer getCustomerId() {
         return customerId;
