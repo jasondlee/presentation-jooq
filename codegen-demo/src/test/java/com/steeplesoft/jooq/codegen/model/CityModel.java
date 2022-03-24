@@ -21,24 +21,27 @@ public class CityModel {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public CityModel setCityId(Integer cityId) {
         this.cityId = cityId;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public CityModel setCity(String city) {
         this.city = city;
+        return this;
     }
 
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(LocalDateTime lastUpdate) {
+    public CityModel setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+        return this;
     }
 
     @Override
