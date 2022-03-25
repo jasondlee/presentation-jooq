@@ -1,16 +1,16 @@
 package com.steeplesoft.jooq.codegen;
 
-import static com.steeplesoft.jooq_demo.generated.tables.Actor.ACTOR;
-import static com.steeplesoft.jooq_demo.generated.tables.Customer.CUSTOMER;
-import static com.steeplesoft.jooq_demo.generated.tables.Film.FILM;
-
-import java.util.List;
-
 import com.steeplesoft.jooq.codegen.model.ActorModel;
 import com.steeplesoft.jooq.codegen.model.CustomerModel;
 import com.steeplesoft.jooq.codegen.model.FilmModel;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static com.steeplesoft.jooq_demo.generated.tables.Actor.ACTOR;
+import static com.steeplesoft.jooq_demo.generated.tables.Customer.CUSTOMER;
+import static com.steeplesoft.jooq_demo.generated.tables.Film.FILM;
 
 public class RecordMapperTest {
     private DSLContext dsl = DslContextProvider.getDslContextWithMappers();
@@ -21,6 +21,27 @@ public class RecordMapperTest {
                 .fetchInto(ActorModel.class);
 
         actors.forEach(System.out::println);
+    }
+
+
+    @Test
+    public void time() {
+        DSLContext noMap = DslContextProvider.getDslContext();
+        long start = System.currentTimeMillis();
+        int loopMax = 10000;
+        for (int i = 0; i < loopMax; i++) {
+            noMap.selectFrom(ACTOR).fetchInto(ActorModel.class);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("Reflection time: " + ((end-start) / 1000.0) );
+
+        start = System.currentTimeMillis();
+        for (int i = 0; i < loopMax; i++) {
+            dsl.selectFrom(ACTOR).fetchInto(ActorModel.class);
+        }
+        end = System.currentTimeMillis();
+        System.out.println("Mapper time: " + ((end-start) / 1000.0) );
+
     }
 
     @Test

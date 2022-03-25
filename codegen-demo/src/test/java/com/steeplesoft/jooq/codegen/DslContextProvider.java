@@ -1,7 +1,6 @@
 package com.steeplesoft.jooq.codegen;
 
 import com.steeplesoft.jooq.codegen.mapper.SakilaRecordMapperProvider;
-import org.jetbrains.annotations.NotNull;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -33,7 +32,6 @@ class DslContextProvider {
         }
     }
 
-    @NotNull
     private static Configuration getConfiguration() throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
         Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/jooq_demo",
