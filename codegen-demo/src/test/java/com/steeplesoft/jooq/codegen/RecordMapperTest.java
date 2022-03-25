@@ -64,4 +64,26 @@ public class RecordMapperTest {
 
         System.out.println(customers);
     }
+
+    @Test
+    public void time() {
+        int loopMax = 1000;
+
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < loopMax; i++) {
+            dsl.selectFrom(ACTOR).fetchInto(ActorModel.class);
+        }
+        long end = System.currentTimeMillis();
+
+        System.out.println("Mapper time: " + ((end-start)/1000.0));
+
+        DSLContext refl = DslContextProvider.getDslContext();
+        start = System.currentTimeMillis();
+        for (int i = 0; i < loopMax; i++) {
+            refl.selectFrom(ACTOR).fetchInto(ActorModel.class);
+        }
+        end = System.currentTimeMillis();
+
+        System.out.println("Reflection time: " + ((end-start)/1000.0));
+    }
 }

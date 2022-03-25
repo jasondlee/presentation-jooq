@@ -13,7 +13,7 @@ public class CustomerModel {
     protected String firstName;
     protected String lastName;
     protected String email;
-    protected Integer addressId;
+    protected AddressModel address;
     protected Boolean activeBool;
     protected LocalDate createDate;
     protected LocalDateTime lastUpdate;
@@ -22,21 +22,6 @@ public class CustomerModel {
     public CustomerModel() {
 
     }
-
-//    public CustomerModel(Integer customerId, Integer storeId, String firstName, String lastName, String email,
-//                         Integer addressId, Boolean activeBool, LocalDate createDate, LocalDateTime lastUpdate,
-//                         Integer active) {
-//        this.customerId = customerId;
-//        this.storeId = storeId;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.email = email;
-//        this.addressId = addressId;
-//        this.activeBool = activeBool;
-//        this.createDate = createDate;
-//        this.lastUpdate = lastUpdate;
-//        this.active = active;
-//    }
 
     public Integer getCustomerId() {
         return customerId;
@@ -83,12 +68,12 @@ public class CustomerModel {
         return this;
     }
 
-    public Integer getAddressId() {
-        return addressId;
+    public AddressModel getAddress() {
+        return address;
     }
 
-    public CustomerModel setAddressId(Integer addressId) {
-        this.addressId = addressId;
+    public CustomerModel setAddress(AddressModel address) {
+        this.address = address;
         return this;
     }
 
@@ -135,7 +120,7 @@ public class CustomerModel {
                 .setFirstName(r.get(CUSTOMER.FIRST_NAME))
                 .setLastName(r.get(CUSTOMER.LAST_NAME))
                 .setEmail(r.get(CUSTOMER.EMAIL))
-                .setAddressId(r.get(CUSTOMER.ADDRESS_ID))
+//                .setAddressId(r.get(CUSTOMER.ADDRESS_ID))
                 .setActiveBool(r.get(CUSTOMER.ACTIVEBOOL))
                 .setCreateDate(r.get(CUSTOMER.CREATE_DATE))
                 .setLastUpdate(r.get(CUSTOMER.LAST_UPDATE))
@@ -151,7 +136,7 @@ public class CustomerModel {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", addressId=" + addressId +
+                ", address=" + address +
                 ", activeBool=" + activeBool +
                 ", createDate=" + createDate +
                 ", lastUpdate=" + lastUpdate +

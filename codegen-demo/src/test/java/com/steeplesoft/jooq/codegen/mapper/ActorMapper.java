@@ -10,8 +10,8 @@ public class ActorMapper implements RecordMapper<ActorRecord, ActorModel> {
     @Override
     public ActorModel map(ActorRecord actorRecord) {
         return new ActorModel()
-                .setId(actorRecord.getValue(ACTOR.ACTOR_ID))
-                .setFirstName(actorRecord.getValue(ACTOR.FIRST_NAME))
-                .setLastName(actorRecord.getValue(ACTOR.LAST_NAME));
+                .setId(actorRecord.getActorId())
+                .setFirstName(actorRecord.getFirstName())
+                .setLastName(actorRecord.getLastName());
     }
 }

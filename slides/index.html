@@ -726,17 +726,132 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 <section class="slide">
     <h2>Advanced Wizardry</h2>
     <ul>
-        <li>RecordMappers</li>
         <li>Nested Objects</li>
         <li>Multisets</li>
     </ul>
 </section>
 
 <section class="slide">
-    <h2>Advanced Wizardry - RecordMappers</h2>
-
+    <h2>Advanced Wizardry - Nested Objects</h2>
+    <div>Scenario: 1:1 relationships, such as Customer -> Address</div>
+    <img class="next" src="pictures/sakila-customer-address.png"/>
 </section>
 
+<section class="slide">
+    <h2>Advanced Wizardry - Nested Objects (cont)</h2>
+    <div>The magic sauce: <code>DSL.row()</code></div>
+    <div class="next"><pre><code style="font-size: 14px; line-height: 1.5;">row(
+        ADDRESS.ADDRESS_,
+        ADDRESS.ADDRESS2,
+        ADDRESS.CITY_ID,
+        ADDRESS.POSTAL_CODE,
+        ADDRESS.PHONE
+).mapping((address, address2, cityId, postalCode, phone) -> new AddressModel()
+        .setAddress(address)
+        .setAddress2(address2)
+        .setPostalCode(postalCode)
+        .setPhone(phone)).as("address")</code></pre></div>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - Nested Objects (cont)</h2>
+    <div>You can nest the nesting:</div>
+    <pre><code style="font-size: 14px; line-height: 1.5;">row(
+        ADDRESS.ADDRESS_,
+        ADDRESS.ADDRESS2,
+        row(
+                CITY.CITY_ID,
+                CITY.CITY_,
+                CITY.LAST_UPDATE
+        ).mapping((id, city, lastUpdate) -> new CityModel()
+                .setCityId(id)
+                .setCity(city)
+                .setLastUpdate(lastUpdate)
+        ).as("city"),
+        ADDRESS.POSTAL_CODE,
+        ADDRESS.PHONE
+)</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - Nested Objects (cont)</h2>
+    <div>You still need to make the joins</div>
+    <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select(
+    CUSTOMER.FIRST_NAME,
+    //...
+)
+.from(CUSTOMER)
+    .join(ADDRESS)
+        .on(CUSTOMER.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
+    .join(CITY)
+        .on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - Nested Objects (cont)</h2>
+    <div>However, implicit joins work</div>
+    <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select(
+        CUSTOMER.FIRST_NAME,
+        ...
+        row(
+                CUSTOMER.address().ADDRESS_,
+                CUSTOMER.address().ADDRESS2,
+                row(
+                        CUSTOMER.address().city().CITY_ID,
+                        CUSTOMER.address().city().CITY_,
+                        CUSTOMER.address().city().LAST_UPDATE
+                ).mapping(...),
+                ...
+        ).mapping(..)
+)
+.from(CUSTOMER)
+.where(CUSTOMER.CUSTOMER_ID.eq(1))</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - Nested Objects (cont)</h2>
+    <div>Function references can make the code more concise and reusable:</div>
+    <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select(
+        CUSTOMER.FIRST_NAME,
+        CUSTOMER.LAST_NAME,
+        CUSTOMER.EMAIL,
+        addressRow()
+)
+.from(CUSTOMER)
+.where(CUSTOMER.CUSTOMER_ID.eq(1))
+.fetchOne(mapping((this::mapCustomer)));</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - Nested Objects (cont)</h2>
+    <div>Extracted address <code>row</code>:</div>
+    <pre><code style="font-size: 14px; line-height: 1.5;">private SelectField&lt;AddressModel&gt; addressRow() {
+    return row(
+            CUSTOMER.address().ADDRESS_,
+            CUSTOMER.address().ADDRESS2,
+            cityRow(),
+            CUSTOMER.address().POSTAL_CODE,
+            CUSTOMER.address().PHONE
+    ).mapping(this::mapAddress).as("address");
+}</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - Nested Objects (cont)</h2>
+    <div>Extracted record mapping:</div>
+    <pre><code style="font-size: 14px; line-height: 1.5;">private AddressModel mapAddress(String address,
+        String address2,
+        CityModel city,
+        String postalCode,
+        String phone) {
+    return new AddressModel()
+            .setAddress(address)
+            .setAddress2(address2)
+            .setCity(city)
+            .setPostalCode(postalCode)
+            .setPhone(phone);
+}</code></pre>
+</section>
 
 <footer class="badge">
     <a href="https://github.com/shower/shower">Fork me on GitHub</a>

@@ -33,64 +33,72 @@ public class AddressModel {
         return addressId;
     }
 
-    public void setAddressId(Integer addressId) {
+    public AddressModel setAddressId(Integer addressId) {
         this.addressId = addressId;
+        return this;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public AddressModel setAddress(String address) {
         this.address = address;
+        return this;
     }
 
     public String getAddress2() {
         return address2;
     }
 
-    public void setAddress2(String address2) {
+    public AddressModel setAddress2(String address2) {
         this.address2 = address2;
+        return this;
     }
 
     public String getDistrict() {
         return district;
     }
 
-    public void setDistrict(String district) {
+    public AddressModel setDistrict(String district) {
         this.district = district;
+        return this;
     }
 
     public CityModel getCity() {
         return city;
     }
 
-    public void setCity(CityModel city) {
+    public AddressModel setCity(CityModel city) {
         this.city = city;
+        return this;
     }
 
     public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
+    public AddressModel setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+        return this;
     }
 
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public AddressModel setPhone(String phone) {
         this.phone = phone;
+        return this;
     }
 
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(LocalDateTime lastUpdate) {
+    public AddressModel setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+        return this;
     }
 
     @Override
