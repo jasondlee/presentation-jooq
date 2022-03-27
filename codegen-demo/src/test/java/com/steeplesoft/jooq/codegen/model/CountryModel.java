@@ -2,7 +2,7 @@ package com.steeplesoft.jooq.codegen.model;
 
 import java.time.LocalDateTime;
 
-public class CountryModel {
+public class CountryModel extends BaseModel {
     private Integer countryId;
     private String country;
     private LocalDateTime lastUpdate;

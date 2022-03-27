@@ -4,7 +4,7 @@ import org.jooq.Record;
 
 import static com.steeplesoft.jooq_demo.generated.tables.Actor.ACTOR;
 
-public class ActorModel {
+public class ActorModel extends BaseModel {
     protected Integer id;
     protected String lastName;
     protected String firstName;

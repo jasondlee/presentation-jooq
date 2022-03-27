@@ -15,7 +15,7 @@ import static com.steeplesoft.jooq_demo.generated.tables.Film.FILM;
 public class RecordMapperTest {
     private DSLContext dsl = DslContextProvider.getDslContextWithMappers();
 
-    @Test
+//    @Test
     public void actorMapper() {
         List<ActorModel> actors = dsl.selectFrom(ACTOR)
                 .fetchInto(ActorModel.class);
@@ -23,28 +23,7 @@ public class RecordMapperTest {
         actors.forEach(System.out::println);
     }
 
-
-    @Test
-    public void time() {
-        DSLContext noMap = DslContextProvider.getDslContext();
-        long start = System.currentTimeMillis();
-        int loopMax = 10000;
-        for (int i = 0; i < loopMax; i++) {
-            noMap.selectFrom(ACTOR).fetchInto(ActorModel.class);
-        }
-        long end = System.currentTimeMillis();
-        System.out.println("Reflection time: " + ((end-start) / 1000.0) );
-
-        start = System.currentTimeMillis();
-        for (int i = 0; i < loopMax; i++) {
-            dsl.selectFrom(ACTOR).fetchInto(ActorModel.class);
-        }
-        end = System.currentTimeMillis();
-        System.out.println("Mapper time: " + ((end-start) / 1000.0) );
-
-    }
-
-    @Test
+//    @Test
     public void filmMapper() {
         List<FilmModel> films = dsl.select()
                 .from(FILM)
@@ -54,7 +33,7 @@ public class RecordMapperTest {
         System.out.println(films);
     }
 
-    @Test
+//    @Test
     public void complexFilter() {
         List<CustomerModel> customers = dsl.select()
                 .from(CUSTOMER)
@@ -67,23 +46,56 @@ public class RecordMapperTest {
 
     @Test
     public void time() {
-        int loopMax = 1000;
+        System.out.println("time():");
+        DSLContext noMap = DslContextProvider.getDslContext();
+        int loopMax = 10000;
+        long start = 0;
+        long end = 0;
 
-        long start = System.currentTimeMillis();
+        start = System.currentTimeMillis();
         for (int i = 0; i < loopMax; i++) {
             dsl.selectFrom(ACTOR).fetchInto(ActorModel.class);
         }
-        long end = System.currentTimeMillis();
+        end = System.currentTimeMillis();
+        System.out.println("    Mapper time: " + ((end-start) / 1000.0) );
 
-        System.out.println("Mapper time: " + ((end-start)/1000.0));
-
-        DSLContext refl = DslContextProvider.getDslContext();
         start = System.currentTimeMillis();
         for (int i = 0; i < loopMax; i++) {
-            refl.selectFrom(ACTOR).fetchInto(ActorModel.class);
+            noMap.selectFrom(ACTOR).fetchInto(ActorModel.class);
         }
         end = System.currentTimeMillis();
+        System.out.println("    Reflection time: " + ((end-start) / 1000.0) );
 
-        System.out.println("Reflection time: " + ((end-start)/1000.0));
+
+    }
+
+    @Test
+    public void time2() {
+        DSLContext refl = DslContextProvider.getDslContext();
+        int loopMax = 10000;
+        long start = 0;
+        long end = 0;
+
+        for (int i = 0; i < loopMax; i++) {
+            dsl.selectFrom(ACTOR).fetchInto(ActorModel.class);
+        }
+
+        int count = 0;
+        while (count++ < 10) {
+            System.out.println("time2():");
+            start = System.currentTimeMillis();
+            for (int i = 0; i < loopMax; i++) {
+                dsl.selectFrom(ACTOR).fetchInto(ActorModel.class);
+            }
+            end = System.currentTimeMillis();
+            System.out.println("    Mapper time: " + ((end - start) / 1000.0));
+
+            start = System.currentTimeMillis();
+            for (int i = 0; i < loopMax; i++) {
+                refl.selectFrom(ACTOR).fetchInto(ActorModel.class);
+            }
+            end = System.currentTimeMillis();
+            System.out.println("    Reflection time: " + ((end - start) / 1000.0));
+        }
     }
 }

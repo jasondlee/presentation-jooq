@@ -6,11 +6,12 @@ import java.time.LocalDateTime;
 
 import static com.steeplesoft.jooq_demo.generated.tables.Store.STORE;
 
-public class StaffModel {
+public class StaffModel extends BaseModel {
     protected Integer staffId;
     protected String firstName;
     protected String lastName;
     protected String userName;
+    protected AddressModel address;
     protected String email;
     protected LocalDateTime lastUpdate;
 
@@ -30,48 +31,63 @@ public class StaffModel {
         return staffId;
     }
 
-    public void setStaffId(Integer staffId) {
+    public StaffModel setStaffId(Integer staffId) {
         this.staffId = staffId;
+        return this;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public StaffModel setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public StaffModel setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public StaffModel setUserName(String userName) {
         this.userName = userName;
+        return this;
+    }
+
+    public AddressModel getAddress() {
+        return address;
+    }
+
+    public StaffModel setAddress(AddressModel address) {
+        this.address = address;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public StaffModel setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(LocalDateTime lastUpdate) {
+    public StaffModel setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+        return this;
     }
 
     @Override

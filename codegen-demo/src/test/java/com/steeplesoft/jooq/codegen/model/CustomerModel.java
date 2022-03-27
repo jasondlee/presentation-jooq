@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 import static com.steeplesoft.jooq_demo.generated.tables.Customer.CUSTOMER;
 
-public class CustomerModel {
+public class CustomerModel extends BaseModel {
     protected Integer customerId;
     protected Integer storeId;
     protected String firstName;

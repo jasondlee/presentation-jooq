@@ -853,6 +853,65 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 }</code></pre>
 </section>
 
+<section class="slide">
+    <h2>Advanced Wizardry - Multisets</h2>
+    <ul>
+        <li class="next">Great for 1:M relationships</li>
+        <li class="next">Get the "base" record and 0 or more related records as a <code>List</code></li>
+        <li class="next">Query is built to return related objects as JSON and reconstituted in the application</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - Multisets (cont)</h2>
+    <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select(
+        STORE.STORE_ID,
+        addressRow(STORE.address()),
+        multiset(
+                dsl.select(
+                                STAFF.STAFF_ID,
+                                STAFF.FIRST_NAME,
+                                STAFF.LAST_NAME,
+                                addressRow(STAFF.address()),
+                                STAFF.EMAIL
+                        )
+                        .from(STAFF)
+                        .where(STAFF.STORE_ID.eq(STORE.STORE_ID))
+        ).as("staff").convertFrom(r -> r.map(mapping(this::mapStaff)))
+)
+.from(STORE)
+.fetchInto(StoreModel.class)</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - Multisets (cont)</h2>
+    <pre><code style="font-size: 14px; line-height: 1.5;">private StaffModel mapStaff(Integer id,
+        String firstName,
+        String lastName,
+        AddressModel address,
+        String email) {
+    return new StaffModel()
+            .setStaffId(id)
+            .setFirstName(firstName)
+            .setLastName(lastName)
+            .setAddress(address)
+            .setEmail(email);
+}</code></pre>
+</section>
+
+<section class="slide">
+    <h2>Advanced Wizardry - Multisets (cont)</h2>
+    <pre><code style="font-size: 14px; line-height: 1.5;">private SelectField&lt;AddressModel&gt; addressRow(Address address) {
+    return row(
+            address.ADDRESS_,
+            address.ADDRESS2,
+            cityRow(address),
+            address.POSTAL_CODE,
+            address.PHONE
+    ).mapping(this::mapAddress).as("address");
+}</code></pre>
+</section>
+
 <footer class="badge">
     <a href="https://github.com/shower/shower">Fork me on GitHub</a>
 </footer>

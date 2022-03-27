@@ -2,7 +2,7 @@ package com.steeplesoft.jooq.codegen.model;
 
 import java.time.LocalDateTime;
 
-public class AddressModel {
+public class AddressModel extends BaseModel {
     protected Integer addressId;
     protected String address;
     protected String address2;

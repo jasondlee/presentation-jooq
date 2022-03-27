@@ -4,7 +4,7 @@ import org.jooq.Record;
 
 import static com.steeplesoft.jooq_demo.generated.tables.Film.FILM;
 
-public class FilmModel {
+public class FilmModel extends BaseModel {
     protected Integer id;
     protected String title;
     protected String description;
