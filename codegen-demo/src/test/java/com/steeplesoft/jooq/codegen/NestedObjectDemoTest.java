@@ -1,19 +1,19 @@
 package com.steeplesoft.jooq.codegen;
 
-import static com.steeplesoft.jooq_demo.generated.tables.Address.ADDRESS;
-import static com.steeplesoft.jooq_demo.generated.tables.City.CITY;
-import static com.steeplesoft.jooq_demo.generated.tables.Customer.CUSTOMER;
-import static org.jooq.Records.mapping;
-import static org.jooq.impl.DSL.row;
-
-import java.time.LocalDateTime;
-
 import com.steeplesoft.jooq.codegen.model.AddressModel;
 import com.steeplesoft.jooq.codegen.model.CityModel;
 import com.steeplesoft.jooq.codegen.model.CustomerModel;
 import org.jooq.DSLContext;
 import org.jooq.SelectField;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
+import static com.steeplesoft.jooq_demo.generated.tables.Address.ADDRESS;
+import static com.steeplesoft.jooq_demo.generated.tables.City.CITY;
+import static com.steeplesoft.jooq_demo.generated.tables.Customer.CUSTOMER;
+import static org.jooq.Records.mapping;
+import static org.jooq.impl.DSL.row;
 
 public class NestedObjectDemoTest {
     private DSLContext dsl = DslContextProvider.getDslContext();
@@ -147,7 +147,7 @@ public class NestedObjectDemoTest {
                 )
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_ID.eq(1))
-                .fetchOne(mapping((this::mapCustomer)));
+                .fetchOne(mapping(this::mapCustomer));
         System.out.println(customer);
     }
 

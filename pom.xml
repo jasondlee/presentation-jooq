@@ -54,6 +54,12 @@
                 <artifactId>postgresql</artifactId>
                 <version>${version.pgsql-jdbc}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.intellij</groupId>
+                <artifactId>annotations</artifactId>
+                <version>12</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

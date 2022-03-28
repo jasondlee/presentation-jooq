@@ -724,6 +724,28 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 </section>
 
 <section class="slide">
+    <h2>A CRUDdy Tour</h2>
+    <ul class="next">
+        <li>Create
+            <pre><code style="font-size: 14px; line-height: 1.5;">dsl.newRecord(ACTOR);
+record.setFirstName("Test");
+record.setLastName("Actor");
+record.store();
+int storeId = record.getActorId();</code></pre>
+        </li>
+        <li>Update
+            <pre><code style="font-size: 14px; line-height: 1.5;">ActorRecord actor = dsl.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(10));
+actor.setLastName("Updated");
+actor.update();</code></pre>
+        </li>
+        <li>Delete
+        <pre><code style="font-size: 14px; line-height: 1.5;">ActorRecord record = dsl.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(201));
+record.delete()</code></pre>
+        </li>
+    </ul>
+</section>
+
+<section class="slide">
     <h2>Advanced Wizardry</h2>
     <ul>
         <li>Nested Objects</li>
@@ -741,16 +763,18 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
     <h2>Advanced Wizardry - Nested Objects (cont)</h2>
     <div>The magic sauce: <code>DSL.row()</code></div>
     <div class="next"><pre><code style="font-size: 14px; line-height: 1.5;">row(
-        ADDRESS.ADDRESS_,
-        ADDRESS.ADDRESS2,
-        ADDRESS.CITY_ID,
-        ADDRESS.POSTAL_CODE,
-        ADDRESS.PHONE
-).mapping((address, address2, cityId, postalCode, phone) -> new AddressModel()
+    ADDRESS.ADDRESS_,
+    ADDRESS.ADDRESS2,
+    ADDRESS.CITY_ID,
+    ADDRESS.POSTAL_CODE,
+    ADDRESS.PHONE
+).mapping(
+    (address, address2, cityId, postalCode, phone) -> new AddressModel()
         .setAddress(address)
         .setAddress2(address2)
         .setPostalCode(postalCode)
-        .setPhone(phone)).as("address")</code></pre></div>
+        .setPhone(phone)
+).as("address")</code></pre></div>
 </section>
 
 <section class="slide">
@@ -819,7 +843,7 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 )
 .from(CUSTOMER)
 .where(CUSTOMER.CUSTOMER_ID.eq(1))
-.fetchOne(mapping((this::mapCustomer)));</code></pre>
+.fetchOne(mapping(this::mapCustomer));</code></pre>
 </section>
 
 <section class="slide">
@@ -910,6 +934,35 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
             address.PHONE
     ).mapping(this::mapAddress).as("address");
 }</code></pre>
+</section>
+
+<section class="slide">
+    <h2>So very much more</h2>
+    <ul>
+        <li>Lazy fetching (with streams)</li>
+        <li>Reactive fetching</li>
+        <li>Batch operations</li>
+        <li>Stored Procedures and functions</li>
+        <li>Exporting to XML, CSV, JSON, ...</li>
+        <li>Importing data</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>More resources</h2>
+    <ul>
+        <li>jOOQ Docs: <a href="https://www.jooq.org/doc/latest/manual">https://www.jooq.org/doc/latest/manual</a></li>
+        <li>Stackoverflow: <a href="https://stackoverflow.com/questions/tagged/jooq">https://stackoverflow.com/questions/tagged/jooq</a></li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Thanks for coming!</h2>
+    <ul>
+        <li>Twitter: <a href="https://twitter.com/jasondlee">@jasondlee</a></li>
+        <li>Blog: <a href="https://jasondl.ee">https://jasondl.ee</a></li>
+        <li>LinkedIn: <a href="https://linkedin.com/in/jasondlee">https://linkedin.com/in/jasondlee</a></li>
+    </ul>
 </section>
 
 <footer class="badge">

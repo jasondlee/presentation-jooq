@@ -1,17 +1,17 @@
 CREATE TABLE authors
 (
-    id        int primary key,
-    last_name  text,
-    first_name text
+    id         INT PRIMARY KEY,
+    last_name  TEXT,
+    first_name TEXT
 );
 
 CREATE TABLE books
 (
-    id             int primary key,
-    title          text,
-    description    text,
-    published_year int,
-    author_id      int -- REFERENCES authors (id)
+    id             INT PRIMARY KEY,
+    title          TEXT,
+    description    TEXT,
+    published_year INT,
+    author_id      INT NULL REFERENCES authors (id)
 );
 
 INSERT INTO authors (id, last_name, first_name)

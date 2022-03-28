@@ -73,8 +73,8 @@
                         </target>
 
                         <generate>
-                            <pojos>false</pojos>
-                            <daos>false</daos>
+                            <pojos>true</pojos>
+                            <daos>true</daos>
                             <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>
                             <javaTimeTypes>true</javaTimeTypes>
                             <fluentSetters>true</fluentSetters>

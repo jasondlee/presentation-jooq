@@ -1,14 +1,5 @@
 package com.steeplesoft.jooq.codegen;
 
-import static com.steeplesoft.jooq_demo.generated.tables.Staff.STAFF;
-import static com.steeplesoft.jooq_demo.generated.tables.Store.STORE;
-import static org.jooq.Records.mapping;
-import static org.jooq.impl.DSL.multiset;
-import static org.jooq.impl.DSL.row;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.steeplesoft.jooq.codegen.model.AddressModel;
 import com.steeplesoft.jooq.codegen.model.BaseModel;
@@ -16,17 +7,25 @@ import com.steeplesoft.jooq.codegen.model.CityModel;
 import com.steeplesoft.jooq.codegen.model.StaffModel;
 import com.steeplesoft.jooq.codegen.model.StoreModel;
 import com.steeplesoft.jooq_demo.generated.tables.Address;
-import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.SelectField;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.steeplesoft.jooq_demo.generated.tables.Staff.STAFF;
+import static com.steeplesoft.jooq_demo.generated.tables.Store.STORE;
+import static org.jooq.Records.mapping;
+import static org.jooq.impl.DSL.multiset;
+import static org.jooq.impl.DSL.row;
 
 public class MultisetDemo {
     private DSLContext dsl = DslContextProvider.getDslContext();
 
     @Test
     public void multisetDemo() throws JsonProcessingException {
-        @NotNull List<StoreModel> store = dsl.select(
+        List<StoreModel> store = dsl.select(
                         STORE.STORE_ID,
                         addressRow(STORE.address()),
                         multiset(
