@@ -25,7 +25,7 @@ public class MultisetDemo {
 
     @Test
     public void multisetDemo() throws JsonProcessingException {
-        List<StoreModel> store = dsl.select(
+        List<StoreModel> stores = dsl.select(
                         STORE.STORE_ID,
                         addressRow(STORE.address()),
                         multiset(
@@ -43,7 +43,7 @@ public class MultisetDemo {
                 .from(STORE)
                 .fetchInto(StoreModel.class);
 
-        System.out.println(BaseModel.mapper.writeValueAsString(store));
+        System.out.println(BaseModel.mapper.writeValueAsString(stores));
     }
 
     private StaffModel mapStaff(Integer id, String firstName, String lastName, AddressModel address, String email) {

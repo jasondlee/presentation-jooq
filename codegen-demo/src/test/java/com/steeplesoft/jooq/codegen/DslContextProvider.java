@@ -34,20 +34,19 @@ class DslContextProvider {
 
     private static Configuration getConfiguration() throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/jooq_demo",
-                "jooq_demo", "jooq_demo");
 
-        Configuration configuration = new DefaultConfiguration()
-                .set(conn)
+        return new DefaultConfiguration()
+                .set(DriverManager.getConnection("jdbc:postgresql://localhost/jooq_demo",
+                        "jooq_demo", "jooq_demo"))
                 .set(SQLDialect.POSTGRES)
                 .set(new Settings()
                         .withExecuteLogging(true)
+                        .withRenderFormatted(true)
                         .withRenderCatalog(false)
                         .withRenderSchema(false)
                         .withMaxRows(Integer.MAX_VALUE)
                         .withRenderQuotedNames(RenderQuotedNames.EXPLICIT_DEFAULT_UNQUOTED)
                         .withRenderNameCase(RenderNameCase.LOWER_IF_UNQUOTED)
                 );
-        return configuration;
     }
 }
