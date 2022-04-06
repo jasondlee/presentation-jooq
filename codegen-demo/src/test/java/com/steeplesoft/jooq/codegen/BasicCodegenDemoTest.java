@@ -4,20 +4,12 @@ import com.steeplesoft.jooq.codegen.model.ActorModel;
 import com.steeplesoft.jooq.codegen.model.CustomerModel;
 import com.steeplesoft.jooq.codegen.model.FilmModel;
 import com.steeplesoft.jooq.codegen.model.FullFilmModel;
-import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
 import org.jooq.SelectConditionStep;
-import org.jooq.conf.RenderNameCase;
-import org.jooq.conf.RenderQuotedNames;
-import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultConfiguration;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,9 +59,29 @@ public class BasicCodegenDemoTest {
         SelectConditionStep<Record> query = dsl.select()
                 .from(CUSTOMER)
                 .where(CUSTOMER.FIRST_NAME.eq("MARION")
-                    .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
+                        .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
                 .or(CUSTOMER.FIRST_NAME.eq("TERRY")
-                    .and(CUSTOMER.LAST_NAME.eq("GRISSOM")));
+                        .and(CUSTOMER.LAST_NAME.eq("GRISSOM")));
+        System.out.println(query);
+
+        List<CustomerModel> customers = query
+                .fetch().map(r -> CustomerModel.fromRecord(r));
+
+        System.out.println(customers);
+    }
+
+    @Test
+    public void noCondition() {
+        String lastName
+                = null;
+//                = "SNYDER";
+        SelectConditionStep<Record> query = dsl.select()
+                .from(CUSTOMER)
+                .where(
+                        CUSTOMER.FIRST_NAME.eq("MARION")
+                                .and(
+                                        (lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition()))
+                );
         System.out.println(query);
 
         List<CustomerModel> customers = query
@@ -90,9 +102,9 @@ public class BasicCodegenDemoTest {
                         ACTOR.LAST_NAME)
                 .from(FILM)
                 .join(FILM_ACTOR)
-                    .on(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                .on(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
                 .join(ACTOR)
-                    .on(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
+                .on(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
                 .where(ACTOR.FIRST_NAME.eq("GENE"))
                 .fetch()
                 .stream()
