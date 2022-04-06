@@ -80,7 +80,8 @@ public class BasicCodegenDemoTest {
                 .where(
                         CUSTOMER.FIRST_NAME.eq("MARION")
                                 .and(
-                                        (lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition()))
+                                        (lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition())
+                                )
                 );
         System.out.println(query);
 

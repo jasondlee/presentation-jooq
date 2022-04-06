@@ -13,8 +13,13 @@ import org.jooq.impl.DefaultConfiguration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
 
+@RequestScoped
 class DslContextProvider {
+    @Produces
+    @RequestScoped
     public static DSLContext getDslContext() {
         try {
             return DSL.using(getConfiguration());

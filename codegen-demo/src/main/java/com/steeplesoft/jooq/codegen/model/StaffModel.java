@@ -1,10 +1,6 @@
 package com.steeplesoft.jooq.codegen.model;
 
-import com.steeplesoft.jooq_demo.generated.tables.records.StaffRecord;
-
 import java.time.LocalDateTime;
-
-import static com.steeplesoft.jooq_demo.generated.tables.Store.STORE;
 
 public class StaffModel extends BaseModel {
     protected Integer staffId;
