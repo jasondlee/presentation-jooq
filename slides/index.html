@@ -127,15 +127,15 @@
 
 <section class="slide">
     <h2>Supported Databases</h2>
-    <span class="next">What databases are supported?</span>
+    <span>What databases are supported?</span>
     <span class="next shout">All of them!</span>
 </section>
 
 <section class="slide">
     <h2>Supported Databases (cont)</h2>
-    <ul class="next">
+    <ul>
         <li>Open Source and Commercial licenses</li>
-        <li class="next">Free
+        <li class="next">Open source license
             <ul class="columns four">
                 <li>PostgreSQL</li>
                 <li>MySQL</li>
@@ -266,7 +266,7 @@ DSLContext context = DSL.using(configuration);
 <section class="slide">
     <h2>Code Generation - jOOQ Done right</h2>
     <div>You can use jOOQ just for SQL authoring. But you shouldn't. :)</div>
-    <div class="next">jOOQ code generation produces lots of artifacts</div>
+    <div class="next">jOOQ code generation produces lots of helpful artifacts</div>
     <ul class="next columns three">
         <li>Tables</li>
         <li>Records</li>
@@ -460,16 +460,17 @@ where (
     <ul>
         <li class="next">One more:
             <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
-    .where(CUSTOMER.FIRST_NAME.eq("MARION")).and(CUSTOMER.LAST_NAME.eq("SNYDER"))
-    .or(CUSTOMER.FIRST_NAME.eq("TERRY")).and(CUSTOMER.LAST_NAME.eq("GRISSOM"))</code></pre>
+    .where(CUSTOMER.FIRST_NAME.eq("MARION"))
+        .and(CUSTOMER.LAST_NAME.eq("SNYDER"))
+    .or(CUSTOMER.FIRST_NAME.eq("TERRY"))
+        .and(CUSTOMER.LAST_NAME.eq("GRISSOM"))</code></pre>
         </li>
         <li class="next">SQL:
             <pre><code style="font-size: 14px; line-height: 1.5;">select ... from customer
 where (
   (
     (
-      customer.first_name = 'MARION'
-      and customer.last_name = 'SNYDER'
+      customer.first_name = 'MARION' and customer.last_name = 'SNYDER'
     )
     or customer.first_name = 'TERRY'
   )
@@ -481,7 +482,7 @@ where (
 <section class="slide">
     <h2>Filter Data (cont)</h2>
     <ul>
-        <li>I lied. Let's fix it.:
+        <li>I lied. Let's fix it:
             <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
     .where(CUSTOMER.FIRST_NAME.eq("MARION")
         .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
@@ -506,11 +507,11 @@ where (
     <h2>Filter Data (cont)</h2>
     <ul>
         <li>I lied again. Let's talk conditional conditions.
-            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">public List&lt;CustomerModel&gt; noCondition(@QueryParam("lastName") String lastName) {
+            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">public List&lt;CustomerModel&gt; getCustomers(@QueryParam("lastName") String lastName) {
     return dsl.select()
             .from(CUSTOMER)
             .where(CUSTOMER.FIRST_NAME.eq("MARION")
-            .and((lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition())))
+            .and(lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition()))
             .fetch().map(r -&gt; CustomerModel.fromRecord(r));
 }</code></pre>
         </li>
@@ -757,7 +758,7 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
     <h2>A CRUDdy Tour</h2>
     <ul class="next">
         <li>Create
-            <pre><code style="font-size: 14px; line-height: 1.5;">dsl.newRecord(ACTOR);
+            <pre><code style="font-size: 14px; line-height: 1.5;">ActorRecord record = dsl.newRecord(ACTOR);
 record.setFirstName("Test");
 record.setLastName("Actor");
 record.store();

@@ -25,13 +25,13 @@ public class ConditionResource {
     private DSLContext dsl;
 
     @GET
-    public List<CustomerModel> noCondition(@QueryParam("lastName") String lastName) {
+    public List<CustomerModel> getCustomers(@QueryParam("lastName") String lastName) {
         return dsl.select()
                 .from(CUSTOMER)
                 .where(
                         CUSTOMER.FIRST_NAME.eq("MARION")
                                 .and(
-                                        (lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition())
+                                        lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition()
                                 )
                 ).fetch().map(r -> CustomerModel.fromRecord(r));
     }
