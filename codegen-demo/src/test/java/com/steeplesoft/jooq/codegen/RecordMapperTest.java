@@ -5,6 +5,7 @@ import com.steeplesoft.jooq.codegen.model.CustomerModel;
 import com.steeplesoft.jooq.codegen.model.FilmModel;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import static com.steeplesoft.jooq_demo.generated.tables.Actor.ACTOR;
 import static com.steeplesoft.jooq_demo.generated.tables.Customer.CUSTOMER;
 import static com.steeplesoft.jooq_demo.generated.tables.Film.FILM;
 
+@Disabled
 public class RecordMapperTest {
     private DSLContext dsl = DslContextProvider.getDslContextWithMappers();
 

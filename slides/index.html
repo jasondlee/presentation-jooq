@@ -244,7 +244,7 @@ DSLContext context = DSL.using(configuration);
     <pre><code>dsl.select(...)
         .from(DSL.table("actor"))
         <mark class="important">.fetch())
-    .map(r -> Author.fromRecord(r))
+    .map(r -&gt; Author.fromRecord(r))
     .collect(Collectors.toList())</mark></code></pre>
     </p>
 </section>
@@ -506,22 +506,21 @@ where (
     <h2>Filter Data (cont)</h2>
     <ul>
         <li>I lied again. Let's talk conditional conditions.
-            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
-    .where(CUSTOMER.FIRST_NAME.eq("MARION")
-        .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
-    .or(CUSTOMER.FIRST_NAME.eq("TERRY")
-        .and(CUSTOMER.LAST_NAME.eq("GRISSOM")))</code></pre>
+            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">public List&lt;CustomerModel&gt; noCondition(@QueryParam("lastName") String lastName) {
+    return dsl.select()
+            .from(CUSTOMER)
+            .where(CUSTOMER.FIRST_NAME.eq("MARION")
+            .and((lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition())))
+            .fetch().map(r -&gt; CustomerModel.fromRecord(r));
+}</code></pre>
         </li>
         <li class="next">SQL:
-            <pre><code style="font-size: 14px; line-height: 1.5;">where (
-  (
-    customer.first_name = 'MARION'
-    and customer.last_name = 'SNYDER'
-  ) or (
-    customer.first_name = 'TERRY'
-    and customer.last_name = 'GRISSOM'
-  )
-)</code></pre>
+            <pre><code style="font-size: 14px; line-height: 1.5;">from customer
+where customer.first_name = 'MARION'
+...
+from customer
+where (customer.first_name = 'MARION'
+  and customer.last_name = 'SNYDER')</code></pre>
         </li>
     </ul>
 </section>
@@ -786,7 +785,7 @@ record.delete()</code></pre>
 
 <section class="slide">
     <h2>Advanced Wizardry - Nested Objects</h2>
-    <div>Scenario: 1:1 relationships, such as Customer -> Address</div>
+    <div>Scenario: 1:1 relationships, such as Customer -&gt; Address</div>
     <img class="next" src="pictures/sakila-customer-address.png"/>
 </section>
 
@@ -800,7 +799,7 @@ record.delete()</code></pre>
     ADDRESS.POSTAL_CODE,
     ADDRESS.PHONE
 ).mapping(
-    (address, address2, cityId, postalCode, phone) -> new AddressModel()
+    (address, address2, cityId, postalCode, phone) -&gt; new AddressModel()
         .setAddress(address)
         .setAddress2(address2)
         .setPostalCode(postalCode)
@@ -818,7 +817,7 @@ record.delete()</code></pre>
                 CITY.CITY_ID,
                 CITY.CITY_,
                 CITY.LAST_UPDATE
-        ).mapping((id, city, lastUpdate) -> new CityModel()
+        ).mapping((id, city, lastUpdate) -&gt; new CityModel()
                 .setCityId(id)
                 .setCity(city)
                 .setLastUpdate(lastUpdate)
@@ -932,7 +931,7 @@ record.delete()</code></pre>
                         )
                         .from(STAFF)
                         .where(STAFF.STORE_ID.eq(STORE.STORE_ID))
-        ).as("staff").convertFrom(r -> r.map(mapping(this::mapStaff)))
+        ).as("staff").convertFrom(r -&gt; r.map(mapping(this::mapStaff)))
 )
 .from(STORE)
 .fetchInto(StoreModel.class)</code></pre>
@@ -1003,7 +1002,7 @@ record.delete()</code></pre>
 <div class="progress"></div>
 
 <script src="node_modules/@shower/core/dist/shower.js"></script>
-<!-- Copyright © 2022 Yours Truly, Famous Inc. -->
+<!-- Copyright © 2022 Yours Truly, Famous Inc. --&gt;
 
 </body>
 </html>

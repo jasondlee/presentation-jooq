@@ -5,8 +5,6 @@ import com.steeplesoft.jooq.codegen.model.CustomerModel;
 import com.steeplesoft.jooq.codegen.model.FilmModel;
 import com.steeplesoft.jooq.codegen.model.FullFilmModel;
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.SelectConditionStep;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;
 
@@ -31,11 +29,9 @@ public class BasicCodegenDemoTest {
 
     @Test
     public void simpleFilter() {
-        SelectConditionStep<Record> query = dsl.select()
+        List<FilmModel> films = dsl.select()
                 .from(FILM)
-                .where(FILM.TITLE.like("%THE%"));
-        System.out.println(query);
-        List<FilmModel> films = query
+                .where(FILM.TITLE.like("%THE%"))
                 .fetch().map(r -> FilmModel.fromRecord(r));
 
         System.out.println(films);
@@ -43,12 +39,10 @@ public class BasicCodegenDemoTest {
 
     @Test
     public void complexFilter() {
-        SelectConditionStep<Record> query = dsl.select()
+        List<CustomerModel> customers = dsl.select()
                 .from(CUSTOMER)
                 .where(CUSTOMER.FIRST_NAME.eq("MARION"))
-                .and(CUSTOMER.LAST_NAME.eq("SNYDER"));
-        System.out.println(query);
-        List<CustomerModel> customers = query
+                .and(CUSTOMER.LAST_NAME.eq("SNYDER"))
                 .fetch().map(r -> CustomerModel.fromRecord(r));
 
         System.out.println(customers);
@@ -56,15 +50,12 @@ public class BasicCodegenDemoTest {
 
     @Test
     public void moreComplexFilter() {
-        SelectConditionStep<Record> query = dsl.select()
+        List<CustomerModel> customers = dsl.select()
                 .from(CUSTOMER)
                 .where(CUSTOMER.FIRST_NAME.eq("MARION")
                         .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
                 .or(CUSTOMER.FIRST_NAME.eq("TERRY")
-                        .and(CUSTOMER.LAST_NAME.eq("GRISSOM")));
-        System.out.println(query);
-
-        List<CustomerModel> customers = query
+                        .and(CUSTOMER.LAST_NAME.eq("GRISSOM")))
                 .fetch().map(r -> CustomerModel.fromRecord(r));
 
         System.out.println(customers);
@@ -75,17 +66,14 @@ public class BasicCodegenDemoTest {
         String lastName
                 = null;
 //                = "SNYDER";
-        SelectConditionStep<Record> query = dsl.select()
+        List<CustomerModel> customers = dsl.select()
                 .from(CUSTOMER)
                 .where(
                         CUSTOMER.FIRST_NAME.eq("MARION")
                                 .and(
                                         (lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition())
                                 )
-                );
-        System.out.println(query);
-
-        List<CustomerModel> customers = query
+                )
                 .fetch().map(r -> CustomerModel.fromRecord(r));
 
         System.out.println(customers);
