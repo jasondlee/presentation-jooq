@@ -480,15 +480,34 @@ where (
 
 <section class="slide">
     <h2>Filter Data (cont)</h2>
-    <ul>
-        <li>I lied. Let's fix it.:
-            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
+    <ul class="columns two">
+        <li>I lied. Let's fix it. Old:
+            <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
+    .where(CUSTOMER.FIRST_NAME.eq("MARION"))
+        .and(CUSTOMER.LAST_NAME.eq("SNYDER"))
+    .or(CUSTOMER.FIRST_NAME.eq("TERRY"))
+        .and(CUSTOMER.LAST_NAME.eq("GRISSOM"))</code></pre>
+        </li>
+        <li>New:
+            <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
     .where(CUSTOMER.FIRST_NAME.eq("MARION")
         .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
     .or(CUSTOMER.FIRST_NAME.eq("TERRY")
         .and(CUSTOMER.LAST_NAME.eq("GRISSOM")))</code></pre>
         </li>
-        <li class="next">SQL:
+        <li>SQL:
+            <pre><code style="font-size: 14px; line-height: 1.5;">select ... from customer
+where (
+  (
+    (
+      customer.first_name = 'MARION'
+      and customer.last_name = 'SNYDER'
+    )
+    or customer.first_name = 'TERRY'
+  )
+  and customer.last_name = 'GRISSOM')</code></pre>
+        </li>
+        <li>SQL:
             <pre><code style="font-size: 14px; line-height: 1.5;">where (
   (
     customer.first_name = 'MARION'
