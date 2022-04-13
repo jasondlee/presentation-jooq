@@ -127,15 +127,15 @@
 
 <section class="slide">
     <h2>Supported Databases</h2>
-    <span class="next">What databases are supported?</span>
+    <span>What databases are supported?</span>
     <span class="next shout">All of them!</span>
 </section>
 
 <section class="slide">
     <h2>Supported Databases (cont)</h2>
-    <ul class="next">
+    <ul>
         <li>Open Source and Commercial licenses</li>
-        <li class="next">Free
+        <li class="next">Open source license
             <ul class="columns four">
                 <li>PostgreSQL</li>
                 <li>MySQL</li>
@@ -244,7 +244,7 @@ DSLContext context = DSL.using(configuration);
     <pre><code>dsl.select(...)
         .from(DSL.table("actor"))
         <mark class="important">.fetch())
-    .map(r -> Author.fromRecord(r))
+    .map(r -&gt; Author.fromRecord(r))
     .collect(Collectors.toList())</mark></code></pre>
     </p>
 </section>
@@ -266,7 +266,7 @@ DSLContext context = DSL.using(configuration);
 <section class="slide">
     <h2>Code Generation - jOOQ Done right</h2>
     <div>You can use jOOQ just for SQL authoring. But you shouldn't. :)</div>
-    <div class="next">jOOQ code generation produces lots of artifacts</div>
+    <div class="next">jOOQ code generation produces lots of helpful artifacts</div>
     <ul class="next columns three">
         <li>Tables</li>
         <li>Records</li>
@@ -460,16 +460,17 @@ where (
     <ul>
         <li class="next">One more:
             <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
-    .where(CUSTOMER.FIRST_NAME.eq("MARION")).and(CUSTOMER.LAST_NAME.eq("SNYDER"))
-    .or(CUSTOMER.FIRST_NAME.eq("TERRY")).and(CUSTOMER.LAST_NAME.eq("GRISSOM"))</code></pre>
+    .where(CUSTOMER.FIRST_NAME.eq("MARION"))
+        .and(CUSTOMER.LAST_NAME.eq("SNYDER"))
+    .or(CUSTOMER.FIRST_NAME.eq("TERRY"))
+        .and(CUSTOMER.LAST_NAME.eq("GRISSOM"))</code></pre>
         </li>
         <li class="next">SQL:
             <pre><code style="font-size: 14px; line-height: 1.5;">select ... from customer
 where (
   (
     (
-      customer.first_name = 'MARION'
-      and customer.last_name = 'SNYDER'
+      customer.first_name = 'MARION' and customer.last_name = 'SNYDER'
     )
     or customer.first_name = 'TERRY'
   )
@@ -525,22 +526,21 @@ where (
     <h2>Filter Data (cont)</h2>
     <ul>
         <li>I lied again. Let's talk conditional conditions.
-            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
-    .where(CUSTOMER.FIRST_NAME.eq("MARION")
-        .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
-    .or(CUSTOMER.FIRST_NAME.eq("TERRY")
-        .and(CUSTOMER.LAST_NAME.eq("GRISSOM")))</code></pre>
+            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">public List&lt;CustomerModel&gt; getCustomers(@QueryParam("lastName") String lastName) {
+    return dsl.select()
+            .from(CUSTOMER)
+            .where(CUSTOMER.FIRST_NAME.eq("MARION")
+            .and(lastName != null ? CUSTOMER.LAST_NAME.eq(lastName) : DSL.noCondition()))
+            .fetch().map(r -&gt; CustomerModel.fromRecord(r));
+}</code></pre>
         </li>
         <li class="next">SQL:
-            <pre><code style="font-size: 14px; line-height: 1.5;">where (
-  (
-    customer.first_name = 'MARION'
-    and customer.last_name = 'SNYDER'
-  ) or (
-    customer.first_name = 'TERRY'
-    and customer.last_name = 'GRISSOM'
-  )
-)</code></pre>
+            <pre><code style="font-size: 14px; line-height: 1.5;">from customer
+where customer.first_name = 'MARION'
+...
+from customer
+where (customer.first_name = 'MARION'
+  and customer.last_name = 'SNYDER')</code></pre>
         </li>
     </ul>
 </section>
@@ -714,36 +714,6 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 </section>
 
 <section class="slide">
-    <h2>Data Definition Language(DDL)</h2>
-    <p>You can alter the database schema itself as well:</p>
-    <ul class="next1 columns three" style="font-size: 16px;">
-        <li>ALTER DATABASE</li>
-        <li>ALTER DOMAIN</li>
-        <li>ALTER INDEX</li>
-        <li>ALTER SCHEMA</li>
-        <li>ALTER SEQUENCE</li>
-        <li>ALTER TABLE</li>
-        <li>ALTER TYPE</li>
-        <li>ALTER VIEW</li>
-        <li>DROP DATABASE</li>
-        <li>DROP DOMAIN</li>
-        <li>DROP FUNCTION</li>
-        <li>DROP INDEX</li>
-        <li>DROP PROCEDURE</li>
-        <li>DROP SCHEMA</li>
-        <li>DROP SEQUENCE</li>
-        <li>DROP TABLE</li>
-        <li>DROP TRIGGER</li>
-        <li>DROP TYPE</li>
-        <li>DROP VIEW</li>
-        <li>CREATE DATABASE</li>
-        <li>CREATE DOMAIN</li>
-        <li>CREATE FUNCTION</li>
-        <li>CREATE OR REPLACE FUNCTION</li>
-    </ul>
-</section>
-
-<section class="slide">
     <h2>Aggregate Functions</h2>
     <ul class="columns three" style="font-size: 24px;">
         <li>AVG</li>
@@ -774,10 +744,40 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 </section>
 
 <section class="slide">
+    <h2>Data Definition Language(DDL)</h2>
+    <p>You can alter the database schema itself as well:</p>
+    <ul class="next1 columns three" style="font-size: 16px;">
+        <li>ALTER DATABASE</li>
+        <li>ALTER DOMAIN</li>
+        <li>ALTER INDEX</li>
+        <li>ALTER SCHEMA</li>
+        <li>ALTER SEQUENCE</li>
+        <li>ALTER TABLE</li>
+        <li>ALTER TYPE</li>
+        <li>ALTER VIEW</li>
+        <li>DROP DATABASE</li>
+        <li>DROP DOMAIN</li>
+        <li>DROP FUNCTION</li>
+        <li>DROP INDEX</li>
+        <li>DROP PROCEDURE</li>
+        <li>DROP SCHEMA</li>
+        <li>DROP SEQUENCE</li>
+        <li>DROP TABLE</li>
+        <li>DROP TRIGGER</li>
+        <li>DROP TYPE</li>
+        <li>DROP VIEW</li>
+        <li>CREATE DATABASE</li>
+        <li>CREATE DOMAIN</li>
+        <li>CREATE FUNCTION</li>
+        <li>CREATE OR REPLACE FUNCTION</li>
+    </ul>
+</section>
+
+<section class="slide">
     <h2>A CRUDdy Tour</h2>
     <ul class="next">
         <li>Create
-            <pre><code style="font-size: 14px; line-height: 1.5;">dsl.newRecord(ACTOR);
+            <pre><code style="font-size: 14px; line-height: 1.5;">ActorRecord record = dsl.newRecord(ACTOR);
 record.setFirstName("Test");
 record.setLastName("Actor");
 record.store();
@@ -805,7 +805,7 @@ record.delete()</code></pre>
 
 <section class="slide">
     <h2>Advanced Wizardry - Nested Objects</h2>
-    <div>Scenario: 1:1 relationships, such as Customer -> Address</div>
+    <div>Scenario: 1:1 relationships, such as Customer -&gt; Address</div>
     <img class="next" src="pictures/sakila-customer-address.png"/>
 </section>
 
@@ -819,7 +819,7 @@ record.delete()</code></pre>
     ADDRESS.POSTAL_CODE,
     ADDRESS.PHONE
 ).mapping(
-    (address, address2, cityId, postalCode, phone) -> new AddressModel()
+    (address, address2, cityId, postalCode, phone) -&gt; new AddressModel()
         .setAddress(address)
         .setAddress2(address2)
         .setPostalCode(postalCode)
@@ -837,7 +837,7 @@ record.delete()</code></pre>
                 CITY.CITY_ID,
                 CITY.CITY_,
                 CITY.LAST_UPDATE
-        ).mapping((id, city, lastUpdate) -> new CityModel()
+        ).mapping((id, city, lastUpdate) -&gt; new CityModel()
                 .setCityId(id)
                 .setCity(city)
                 .setLastUpdate(lastUpdate)
@@ -951,7 +951,7 @@ record.delete()</code></pre>
                         )
                         .from(STAFF)
                         .where(STAFF.STORE_ID.eq(STORE.STORE_ID))
-        ).as("staff").convertFrom(r -> r.map(mapping(this::mapStaff)))
+        ).as("staff").convertFrom(r -&gt; r.map(mapping(this::mapStaff)))
 )
 .from(STORE)
 .fetchInto(StoreModel.class)</code></pre>
@@ -993,8 +993,7 @@ record.delete()</code></pre>
         <li>Reactive fetching</li>
         <li>Batch operations</li>
         <li>Stored Procedures and functions</li>
-        <li>Exporting to XML, CSV, JSON, ...</li>
-        <li>Importing data</li>
+        <li>Importing/exporting from/to XML, CSV, JSON, ...</li>
     </ul>
 </section>
 
@@ -1022,7 +1021,7 @@ record.delete()</code></pre>
 <div class="progress"></div>
 
 <script src="node_modules/@shower/core/dist/shower.js"></script>
-<!-- Copyright © 2022 Yours Truly, Famous Inc. -->
+<!-- Copyright © 2022 Yours Truly, Famous Inc. --&gt;
 
 </body>
 </html>
