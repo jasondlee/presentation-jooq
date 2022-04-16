@@ -38,6 +38,17 @@ public class BasicCodegenDemoTest {
     }
 
     @Test
+    public void badComplexFilter() {
+        System.out.println(dsl.select().from(CUSTOMER)
+                .where(CUSTOMER.FIRST_NAME.eq("MARION"))
+                .and(CUSTOMER.LAST_NAME.eq("SNYDER"))
+                .or(CUSTOMER.FIRST_NAME.eq("TERRY"))
+                .and(CUSTOMER.LAST_NAME.eq("GRISSOM"))
+                .fetch().map(r -> CustomerModel.fromRecord(r))
+        );
+    }
+
+    @Test
     public void complexFilter() {
         List<CustomerModel> customers = dsl.select()
                 .from(CUSTOMER)

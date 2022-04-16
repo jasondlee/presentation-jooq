@@ -89,6 +89,7 @@
     </ul>
 </section>
 
+<!--
 <section class="slide">
     <h2>What is jOOQ? (cont.)</h2>
     <ul>
@@ -102,6 +103,7 @@
         </li>
     </ul>
 </section>
+-->
 
 <section class="slide">
     <h2>jOOQ Alternatives</h2>
@@ -135,7 +137,7 @@
     <h2>Supported Databases (cont)</h2>
     <ul>
         <li>Open Source and Commercial licenses</li>
-        <li class="next">Open source license
+        <li class="next">Open Source license
             <ul class="columns four">
                 <li>PostgreSQL</li>
                 <li>MySQL</li>
@@ -265,18 +267,19 @@ DSLContext context = DSL.using(configuration);
 
 <section class="slide">
     <h2>Code Generation - jOOQ Done right</h2>
-    <div>You can use jOOQ just for SQL authoring. But you shouldn't. :)</div>
-    <div class="next">jOOQ code generation produces lots of helpful artifacts</div>
-    <ul class="next columns three">
-        <li>Tables</li>
-        <li>Records</li>
-        <li>Sequences</li>
-        <li>POJOs</li>
-        <li>DAOs</li>
-        <li>Stored procedures</li>
-        <li>User-defined types</li>
-        <li>and many more</li>
-    </ul>
+    <div>You can use jOOQ just for SQL authoring. But you probably shouldn't. :)</div>
+    <div class="next">Code generation produces lots of helpful artifacts
+        <ul class="columns three">
+            <li>Tables</li>
+            <li>Records</li>
+            <li>Sequences</li>
+            <li>POJOs</li>
+            <li>DAOs</li>
+            <li>Stored procedures</li>
+            <li>User-defined types</li>
+            <li>and many more</li>
+        </ul>
+    </div>
 </section>
 
 <section class="slide">
@@ -415,13 +418,14 @@ DSLContext context = DSL.using(configuration);
 <section class="slide">
     <h2>Filtering Data</h2>
     <ul>
-        <li class="next">Simple
-            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+        <li>Simple
+            <pre><code style="font-size: 14px; line-height: 1.5;">List<FilmModel> films = dsl.select()
     .from(FILM)
-    .where(FILM.TITLE.like("%THE%"))</code></pre>
+    .where(FILM.TITLE.like("%THE%"))
+    .fetch().map(r -> FilmModel.fromRecord(r));</code></pre>
         </li>
         <li class="next">SQL:
-            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">select
+            <pre><code style="font-size: 14px; line-height: 1.5;">select
   film.film_id,
   film.title,
   ...
@@ -436,10 +440,11 @@ where film.title like '%THE%'</code></pre>
     <h2>Filtering Data (cont)</h2>
     <ul>
         <li>More complex
-            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+            <pre><code style="font-size: 14px; line-height: 1.5;">List<CustomerModel> customers = dsl.select()
     .from(CUSTOMER)
     .where(CUSTOMER.FIRST_NAME.eq("MARION"))
-    .and(CUSTOMER.LAST_NAME.eq("SNYDER"))</code></pre>
+    .and(CUSTOMER.LAST_NAME.eq("SNYDER"))
+    .fetch().map(r -> CustomerModel.fromRecord(r));</code></pre>
         </li>
         <li class="next">SQL:
             <pre><code style="font-size: 14px; line-height: 1.5;">select
@@ -522,6 +527,7 @@ where (
     </ul>
 </section>
 
+<!--
 <section class="slide">
     <h2>Filter Data (cont)</h2>
     <ul>
@@ -544,17 +550,18 @@ where (customer.first_name = 'MARION'
         </li>
     </ul>
 </section>
+-->
 
 <section class="slide">
     <h2>Joins</h2>
     <ul>
         <li>Join types supported:
             <ul>
-                <li class="next">Cross - Cartesian product</li>
-                <li class="next">Inner - Values in both tables</li>
-                <li class="next">Outer - Value from one table, null from the other (LEFT, RIGHT, and FULL)</li>
-                <li class="next">Semi - "existence of rows from one table in another table (using EXISTS or IN)"</li>
-                <li class="next">Anti - "non-existence of rows from one table in another table (using NOT EXISTS or some
+                <li >Cross - Cartesian product</li>
+                <li >Inner - Values in both tables</li>
+                <li >Outer - Value from one table, null from the other (LEFT, RIGHT, and FULL)</li>
+                <li >Semi - "existence of rows from one table in another table (using EXISTS or IN)"</li>
+                <li >Anti - "non-existence of rows from one table in another table (using NOT EXISTS or some
                     conditions NOT IN)"
                 </li>
             </ul>
@@ -565,7 +572,7 @@ where (customer.first_name = 'MARION'
 <section class="slide">
     <h2>Joins - Cross</h2>
     <p>No <code>WHERE</code> class allowed.</p>
-    <pre class="next"><code style="font-size: 14px; line-height: 1.5;">dsl.select()
+    <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select()
     .from(STORE)
     .crossJoin(STAFF)
     .fetch();</code></pre>
@@ -583,17 +590,17 @@ where (customer.first_name = 'MARION'
 <section class="slide">
     <h2>Joins - Outer</h2>
     <ul>
-        <li class="next">Left outer join:
+        <li >Left outer join:
             <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select()
     .from(AUTHORS)
     .leftOuterJoin(BOOKS).on(AUTHORS.ID.eq(BOOKS.AUTHOR_ID))</code></pre>
         </li>
-        <li class="next">Right outer join:
+        <li >Right outer join:
             <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select()
     .from(AUTHORS)
     .rightOuterJoin(BOOKS).on(AUTHORS.ID.eq(BOOKS.AUTHOR_ID))</code></pre>
         </li>
-        <li class="next">Full outer join:
+        <li >Full outer join:
             <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select()
     .from(AUTHORS)
     .fullOuterJoin(BOOKS).on(AUTHORS.ID.eq(BOOKS.AUTHOR_ID))</code></pre>
@@ -612,9 +619,9 @@ where (customer.first_name = 'MARION'
             ADDRESS.ADDRESS_,
             CITY.CITY_
     ).from(STAFF)
-    .join(STORE).on(STAFF.STORE_ID.eq(STORE.STORE_ID))
+    <mark class="important">.join(STORE).on(STAFF.STORE_ID.eq(STORE.STORE_ID))
     .join(ADDRESS).on(STORE.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
-    .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))
+    .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))</mark>
     .fetch();</code></pre>
     </div>
 </section>
@@ -626,9 +633,9 @@ where (customer.first_name = 'MARION'
             STAFF.STAFF_ID,
             STAFF.LAST_NAME,
             STAFF.FIRST_NAME,
-            STAFF.store().STORE_ID,
+            <mark class="important">STAFF.store().STORE_ID,
             STAFF.store().address().ADDRESS_,
-            STAFF.store().address().city().CITY_
+            STAFF.store().address().city().CITY_</mark>
     ).from(STAFF)
     .fetch();</code></pre>
     </div>
@@ -652,8 +659,8 @@ where (customer.first_name = 'MARION'
 <section class="slide">
     <h2>Inserting Data: INSERT .. VALUES</h2>
     <ul>
-        <li class="next">dsl.insertInto(&lt;Table&gt;, [field1, field2, ..., fieldN])</li>
-        <li class="next">Example:<pre><code style="font-size: 14px; line-height: 1.5;">dsl.insertInto(CUSTOMER,
+        <li>dsl.insertInto(&lt;Table&gt;, [field1, field2, ..., fieldN])</li>
+        <li>Example:<pre><code style="font-size: 14px; line-height: 1.5;">dsl.insertInto(CUSTOMER,
     CUSTOMER.CUSTOMER_ID, CUSTOMER.STORE_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME,
         CUSTOMER.ADDRESS_ID, CUSTOMER.ACTIVE)
     .values(1000, 1, "Dummy", "User", 1, 1)
@@ -689,17 +696,17 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 <section class="slide">
     <h2>Updating Data</h2>
     <ul>
-        <li class="next">Basic:
-            <pre class="next"><code style="font-size: 14px; line-height: 1.5;">int count = dsl.update(CUSTOMER)
+        <li>Basic:
+            <pre><code style="font-size: 14px; line-height: 1.5;">int count = dsl.update(CUSTOMER)
     .set(CUSTOMER.ACTIVEBOOL, false)
     .set(CUSTOMER.ACTIVE, 0)
     .where(CUSTOMER.CUSTOMER_ID.eq(1))
     .execute();</code></pre>
         </li>
-        <li class="next">Row value expression:
+        <li>Row value expression:
             <pre><code style="font-size: 14px; line-height: 1.5;">int count = dsl.update(CUSTOMER)
-    .set(row(CUSTOMER.ACTIVEBOOL, CUSTOMER.ACTIVE),
-            row(true, 1))
+        .set(<mark class="important">row(CUSTOMER.ACTIVEBOOL, CUSTOMER.ACTIVE),</mark>
+        <mark class="important">row(true, 1)</mark>)
     .where(CUSTOMER.CUSTOMER_ID.eq(1))
     .execute();</code></pre>
         </li>
@@ -708,7 +715,7 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 
 <section class="slide">
     <h2>Deleting Data</h2>
-    <pre class="next"><code style="font-size: 14px; line-height: 1.5;">int count = dsl.delete(CUSTOMER)
+    <pre><code style="font-size: 14px; line-height: 1.5;">int count = dsl.delete(CUSTOMER)
     .where(CUSTOMER.CUSTOMER_ID.eq(1000))
     .execute();</code></pre>
 </section>
@@ -775,7 +782,7 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 
 <section class="slide">
     <h2>A CRUDdy Tour</h2>
-    <ul class="next">
+    <ul>
         <li>Create
             <pre><code style="font-size: 14px; line-height: 1.5;">ActorRecord record = dsl.newRecord(ACTOR);
 record.setFirstName("Test");
@@ -884,7 +891,7 @@ record.delete()</code></pre>
 
 <section class="slide">
     <h2>Advanced Wizardry - Nested Objects (cont)</h2>
-    <div>Function references can make the code more concise and reusable:</div>
+    <div>Function references and methods can make the code more concise and reusable:</div>
     <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select(
         CUSTOMER.FIRST_NAME,
         CUSTOMER.LAST_NAME,
@@ -989,11 +996,14 @@ record.delete()</code></pre>
 <section class="slide">
     <h2>So very much more</h2>
     <ul>
-        <li>Lazy fetching (with streams)</li>
-        <li>Reactive fetching</li>
-        <li>Batch operations</li>
-        <li>Stored Procedures and functions</li>
-        <li>Importing/exporting from/to XML, CSV, JSON, ...</li>
+        <li><a href="https://www.jooq.org/doc/latest/manual/sql-building/conditional-expressions/true-false-no-condition/">Conditional conditions</a>   </li>
+        <li><a href="https://www.jooq.org/doc/latest/manual/sql-execution/fetching/lazy-fetching/">Lazy fetching</a>
+            (<a href="https://www.jooq.org/doc/latest/manual/sql-execution/fetching/lazy-fetching-with-streams/">with streams</a>)</li>
+        <li><a href="https://www.jooq.org/doc/latest/manual/sql-execution/fetching/reactive-fetching/">Reactive fetching</a></li>
+        <li><a href="https://www.jooq.org/doc/latest/manual/sql-execution/batch-execution/">Batch operations<a/></li>
+        <li><a href="https://www.jooq.org/doc/latest/manual/sql-execution/stored-procedures/">Stored Procedures and functions</a></li>
+        <li><a href="https://www.jooq.org/doc/latest/manual/sql-execution/importing/importing-sources/">Importing from</a> /
+<a href="https://www.jooq.org/doc/latest/manual/sql-execution/exporting/">exporting to</a> XML, CSV, JSON, ...</li>
     </ul>
 </section>
 
@@ -1011,11 +1021,12 @@ record.delete()</code></pre>
         <li>Twitter: <a href="https://twitter.com/jasondlee">@jasondlee</a></li>
         <li>Blog: <a href="https://jasondl.ee">https://jasondl.ee</a></li>
         <li>LinkedIn: <a href="https://linkedin.com/in/jasondlee">https://linkedin.com/in/jasondlee</a></li>
+        <li>Presentation source: <a href="https://github.com/jasondlee/jooq-presentation">Presentation source</a></li>
     </ul>
 </section>
 
 <footer class="badge">
-    <a href="https://github.com/shower/shower">Fork me on GitHub</a>
+    <a href="https://github.com/jasondlee/jooq-presentation">Fork me on GitHub</a>
 </footer>
 
 <div class="progress"></div>
