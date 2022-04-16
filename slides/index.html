@@ -46,7 +46,7 @@
 </header>
 
 <section class="slide textwbg" id="cover">
-    <h2 style="margin: 100px">jOOQ: Data abstractions without distraction</h2>
+    <h2 style="margin: 100px">jOOQ: Data Abstractions Without Distraction</h2>
     <p>Jason Lee</p>
     <p>Principal Software Engineer, Red Hat</p>
     <p>April 2022</p>
@@ -69,7 +69,7 @@
                 <li>Undertow</li>
             </ul>
         </li>
-        <li>Former president <a href="https://okcjug.org">Oklahoma City Java Users Group</a></li>
+        <li>President <a href="https://okcjug.org">Oklahoma City Java Users Group</a></li>
         <li><a href="https://www.packtpub.com/application-development/java-9-programming-blueprints">Book Author - Java
             9 Programming Blueprints</a>
         </li>
@@ -122,6 +122,8 @@
 
 <section class="slide">
     <h2>jOOQ Performance</h2>
+    <div>Average active sessions before/after migrating from Hibernate to jOOQ.</div>
+    <div>"Past performance is no guarantee of future results," of course.</div>
     <img src="pictures/database_load.jpg" alt="database load" style="width: 100%"/>
     <a href="https://twitter.com/baevdm/status/1423636838275768322" style="font-size: small">source</a>
 </section>
@@ -231,9 +233,9 @@ DSLContext context = DSL.using(configuration);
     <h2>Writing queries - non-codegen</h2>
     <p>
     <pre><code>dsl.select(
-        DSL.field("actor_id"),
-        DSL.field("last_name"),
-        DSL.field("first_name")
+    DSL.field("actor_id"),
+    DSL.field("last_name"),
+    DSL.field("first_name")
 )
 .from(DSL.table("actor"))
         </code></pre>
@@ -242,10 +244,13 @@ DSLContext context = DSL.using(configuration);
 
 <section class="slide">
     <h2>Fetching data - non-codegen</h2>
-    <p>Query:
-    <pre><code>dsl.select(...)
-        .from(DSL.table("actor"))
-        <mark class="important">.fetch())
+    <pre><code>dsl.select(
+    DSL.field("actor_id"),
+    DSL.field("last_name"),
+    DSL.field("first_name")
+)
+.from(DSL.table("actor"))
+<mark class="important">.fetch()
     .map(r -&gt; Author.fromRecord(r))
     .collect(Collectors.toList())</mark></code></pre>
     </p>
@@ -675,7 +680,7 @@ where (customer.first_name = 'MARION'
             CUSTOMER.STORE_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME,
             CUSTOMER.ADDRESS_ID, CUSTOMER.ACTIVE)
     .values(1, "Dummy", "User", 1, 1)
-    .returningResult(CUSTOMER.CUSTOMER_ID)
+    <mark class="important">.returningResult(CUSTOMER.CUSTOMER_ID)</mark>
     .fetchOne();
 Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
 </section>
@@ -705,8 +710,10 @@ Integer key = record.get(CUSTOMER.CUSTOMER_ID);</code></pre>
         </li>
         <li>Row value expression:
             <pre><code style="font-size: 14px; line-height: 1.5;">int count = dsl.update(CUSTOMER)
-        .set(<mark class="important">row(CUSTOMER.ACTIVEBOOL, CUSTOMER.ACTIVE),</mark>
-        <mark class="important">row(true, 1)</mark>)
+        .set(
+            <mark class="important">row(CUSTOMER.ACTIVEBOOL, CUSTOMER.ACTIVE),</mark>
+            <mark class="important">row(true, 1)</mark>
+        )
     .where(CUSTOMER.CUSTOMER_ID.eq(1))
     .execute();</code></pre>
         </li>
@@ -896,11 +903,11 @@ record.delete()</code></pre>
         CUSTOMER.FIRST_NAME,
         CUSTOMER.LAST_NAME,
         CUSTOMER.EMAIL,
-        addressRow()
+        <mark class="important">addressRow()</mark>
 )
 .from(CUSTOMER)
 .where(CUSTOMER.CUSTOMER_ID.eq(1))
-.fetchOne(mapping(this::mapCustomer));</code></pre>
+.fetchOne(mapping(<mark class="important">this::mapCustomer</mark>));</code></pre>
 </section>
 
 <section class="slide">
@@ -910,7 +917,7 @@ record.delete()</code></pre>
     return row(
             CUSTOMER.address().ADDRESS_,
             CUSTOMER.address().ADDRESS2,
-            cityRow(),
+            <mark class="important">cityRow()</mark>,
             CUSTOMER.address().POSTAL_CODE,
             CUSTOMER.address().PHONE
     ).mapping(this::mapAddress).as("address");
@@ -922,7 +929,7 @@ record.delete()</code></pre>
     <div>Extracted record mapping:</div>
     <pre><code style="font-size: 14px; line-height: 1.5;">private AddressModel mapAddress(String address,
         String address2,
-        CityModel city,
+        <mark class="important">CityModel city,</mark>
         String postalCode,
         String phone) {
     return new AddressModel()
@@ -946,19 +953,19 @@ record.delete()</code></pre>
 <section class="slide">
     <h2>Advanced Wizardry - Multisets (cont)</h2>
     <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select(
-        STORE.STORE_ID,
-        addressRow(STORE.address()),
-        multiset(
-                dsl.select(
-                                STAFF.STAFF_ID,
-                                STAFF.FIRST_NAME,
-                                STAFF.LAST_NAME,
-                                addressRow(STAFF.address()),
-                                STAFF.EMAIL
-                        )
-                        .from(STAFF)
-                        .where(STAFF.STORE_ID.eq(STORE.STORE_ID))
-        ).as("staff").convertFrom(r -&gt; r.map(mapping(this::mapStaff)))
+    STORE.STORE_ID,
+    addressRow(STORE.address()),
+    <mark class="important">multiset(
+        dsl.select(
+            STAFF.STAFF_ID,
+            STAFF.FIRST_NAME,
+            STAFF.LAST_NAME,
+            addressRow(STAFF.address()),
+            STAFF.EMAIL
+        )
+        .from(STAFF)
+        .where(STAFF.STORE_ID.eq(STORE.STORE_ID))
+    ).as("staff").convertFrom(r -&gt; r.map(mapping(this::mapStaff)))</mark>
 )
 .from(STORE)
 .fetchInto(StoreModel.class)</code></pre>
@@ -1021,7 +1028,7 @@ record.delete()</code></pre>
         <li>Twitter: <a href="https://twitter.com/jasondlee">@jasondlee</a></li>
         <li>Blog: <a href="https://jasondl.ee">https://jasondl.ee</a></li>
         <li>LinkedIn: <a href="https://linkedin.com/in/jasondlee">https://linkedin.com/in/jasondlee</a></li>
-        <li>Presentation source: <a href="https://github.com/jasondlee/jooq-presentation">Presentation source</a></li>
+        <li>Presentation source: <a href="https://github.com/jasondlee/jooq-presentation">https://github.com/jasondlee/jooq-presentation</a></li>
     </ul>
 </section>
 
