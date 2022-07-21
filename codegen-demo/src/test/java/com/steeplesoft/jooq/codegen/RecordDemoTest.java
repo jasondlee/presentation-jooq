@@ -39,11 +39,16 @@ public class RecordDemoTest {
 
     @Test
     public void delete() {
-        ActorRecord record = dsl.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(201));
+        ActorRecord record = dsl.newRecord(ACTOR);
+        record.setFirstName("Test");
+        record.setLastName("Actor");
+        System.out.println(record);
+        record.store();
+        int storeId = record.getActorId();
 
         record.delete();
 
-        ActorRecord record2 = dsl.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(201));
+        ActorRecord record2 = dsl.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(storeId));
         Assertions.assertNull(record2);
     }
 

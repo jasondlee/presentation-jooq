@@ -36,6 +36,15 @@
         .slide pre {
             margin-bottom: 0px;
         }
+
+        li {
+            margin-left: 1em;
+        }
+
+        .slide pre mark {
+            padding: 0px;
+            margin: 0px;
+        }
     </style>
 </head>
 <body class="shower list">
@@ -177,12 +186,12 @@
     <pre><code>&lt;dependency&gt;
     &lt;groupId&gt;org.jooq&lt;/groupId&gt;
     &lt;artifactId&gt;jooq&lt;/artifactId&gt;
-    &lt;version&gt;3.16.5&lt;/version&gt;
+    &lt;version&gt;3.17.2&lt;/version&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.jooq&lt;/groupId&gt;
     &lt;artifactId&gt;jooq-meta&lt;/artifactId&gt;
-    &lt;version&gt;3.16.5&lt;/version&gt;
+    &lt;version&gt;3.17.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </section>
 
@@ -191,8 +200,8 @@
     <div class="next">You're on your own</div>
     <div class="next">Just kidding!
         <pre class="next"><code>dependencies {
-    compile 'org.jooq:jooq:3.16.5'
-    compile 'org.jooq:jooq-meta:3.16.5'
+    compile 'org.jooq:jooq:3.17.2'
+    compile 'org.jooq:jooq-meta:3.17.2'
 }</code></pre>
     </div>
 </section>
@@ -363,11 +372,11 @@ DSLContext context = DSL.using(configuration);
     <div>Maven <code>configuration</code> saved in external file (e.g., jooq.xml)</div>
     <div>File pre-amble:
         <pre><code style="font-size: 14px; line-height: 1.5;">    &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
-        &lt;configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.5.xsd"&gt;</code></pre>
+        &lt;configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.17.2.xsd"&gt;</code></pre>
     </div>
     <div class="next">Command-line:
-        <pre><code style="font-size: 14px; line-height: 1.5;">$ java -classpath jooq-3.16.5.jar:\
-    jooq-meta-3.16.5.jar:jooq-codegen-3.16.5.jar:\
+        <pre><code style="font-size: 14px; line-height: 1.5;">$ java -classpath jooq-3.17.2.jar:\
+    jooq-meta-3.17.2.jar:jooq-codegen-3.17.2.jar:\
     reactive-streams-1.0.3.jar:r2dbc-spi-0.9.0.RELEASE.jar:\
     jakarta.xml.bind-api-3.0.0.jar:mysql-connector-java.jar:. \
     org.jooq.codegen.GenerationTool jooq.xml</code></pre>
@@ -427,7 +436,8 @@ DSLContext context = DSL.using(configuration);
             <pre><code style="font-size: 14px; line-height: 1.5;">List<FilmModel> films = dsl.select()
     .from(FILM)
     .where(FILM.TITLE.like("%THE%"))
-    .fetch().map(r -> FilmModel.fromRecord(r));</code></pre>
+    .fetch()
+    .map(r -> FilmModel.fromRecord(r));</code></pre>
         </li>
         <li class="next">SQL:
             <pre><code style="font-size: 14px; line-height: 1.5;">select
@@ -494,17 +504,17 @@ where (
     <ul class="columns two">
         <li>I lied. Let's fix it. Old:
             <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
-    .where(CUSTOMER.FIRST_NAME.eq("MARION"))
-        .and(CUSTOMER.LAST_NAME.eq("SNYDER"))
-    .or(CUSTOMER.FIRST_NAME.eq("TERRY"))
-        .and(CUSTOMER.LAST_NAME.eq("GRISSOM"))</code></pre>
+    .where(CUSTOMER.FIRST_NAME.eq("MARION"<mark class="important">))</mark>
+        .and(CUSTOMER.LAST_NAME.eq("SNYDER"<mark class="important">))</mark>
+    .or(CUSTOMER.FIRST_NAME.eq("TERRY"<mark class="important">))</mark>
+        .and(CUSTOMER.LAST_NAME.eq("GRISSOM"<mark class="important">))</mark></code></pre>
         </li>
         <li>New:
             <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select().from(CUSTOMER)
-    .where(CUSTOMER.FIRST_NAME.eq("MARION")
-        .and(CUSTOMER.LAST_NAME.eq("SNYDER")))
-    .or(CUSTOMER.FIRST_NAME.eq("TERRY")
-        .and(CUSTOMER.LAST_NAME.eq("GRISSOM")))</code></pre>
+    .where(CUSTOMER.FIRST_NAME.eq("MARION"<mark class="important">)</mark>
+        .and(CUSTOMER.LAST_NAME.eq("SNYDER"<mark class="important">)))</mark>
+    .or(CUSTOMER.FIRST_NAME.eq("TERRY"<mark class="important">)</mark>
+        .and(CUSTOMER.LAST_NAME.eq("GRISSOM"<mark class="important">)))</mark></code></pre>
         </li>
         <li>SQL:
             <pre><code style="font-size: 14px; line-height: 1.5;">select ... from customer
@@ -624,7 +634,7 @@ where (customer.first_name = 'MARION'
             ADDRESS.ADDRESS_,
             CITY.CITY_
     ).from(STAFF)
-    <mark class="important">.join(STORE).on(STAFF.STORE_ID.eq(STORE.STORE_ID))
+<mark class="important">    .join(STORE).on(STAFF.STORE_ID.eq(STORE.STORE_ID))
     .join(ADDRESS).on(STORE.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
     .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))</mark>
     .fetch();</code></pre>
@@ -638,7 +648,7 @@ where (customer.first_name = 'MARION'
             STAFF.STAFF_ID,
             STAFF.LAST_NAME,
             STAFF.FIRST_NAME,
-            <mark class="important">STAFF.store().STORE_ID,
+<mark class="important">            STAFF.store().STORE_ID,
             STAFF.store().address().ADDRESS_,
             STAFF.store().address().city().CITY_</mark>
     ).from(STAFF)
@@ -955,7 +965,7 @@ record.delete()</code></pre>
     <pre><code style="font-size: 14px; line-height: 1.5;">dsl.select(
     STORE.STORE_ID,
     addressRow(STORE.address()),
-    <mark class="important">multiset(
+<mark class="important">    multiset(
         dsl.select(
             STAFF.STAFF_ID,
             STAFF.FIRST_NAME,
