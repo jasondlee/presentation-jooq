@@ -1,14 +1,25 @@
 {
   "private": true,
+  "keywords": [
+    "shower",
+    "presentation",
+    "template"
+  ],
+  "files": [
+    "pictures/**",
+    "index.html"
+  ],
   "scripts": {
     "pdf": "shower pdf",
-    "serve": "shower serve",
-    "archive": "shower archive",
-    "bundle": "shower bundle",
-    "publish": "shower publish"
+    "start": "shower serve",
+    "bundle": "shower bundle --files '**' --files '!{docs,node_modules,bundled}{,/**}' --files '!*.{md,toml,json}'",
+    "archive": "shower archive --files '**' --files '!{docs,node_modules,bundled}{,/**}' --files '!*.{md,toml,json}'",
+    "publish": "shower publish --files '**' --files '!{docs,node_modules,bundled}{,/**}' --files '!*.{md,toml,json}'",
+    "test": "npm run bundle && ls bundled && npm run archive && path-exists presentation.zip"
   },
   "devDependencies": {
-    "@shower/cli": "^0.3.1"
+    "@shower/cli": "^0.3.1",
+    "path-exists-cli": "^2.0.0"
   },
   "dependencies": {
     "@shower/core": "^3.3.0",
